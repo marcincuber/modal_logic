@@ -23,7 +23,7 @@ Sets = [];
 Input String:
 """
 #str_phi = "(#p ^ (@r ^ ~(r > #q)))^~@q"
-str_psi = "@@@@r ^ (~#s ^ @@#t)"
+str_psi = "@r ^ (#s ^ @@#t)"
 print(str_psi)
 
 """
@@ -78,6 +78,31 @@ def recursivedelta(psi,world):
 
 for set in reversed(Sets[0]):
     recursivedelta(set, Worlds[0])
+
+i = 1
+print num_of_worlds, len(Worlds)
+while i > 0:
+    #print "we got i: ", i
+    print "we are here", i, Worlds[i]
+
+    if len(Sets[i]) == 0:
+        i+=1;
+    else:
+        for j in range(0,len(Sets[i])):
+            print "we take: ", Sets[i][j], "and: ", Worlds[i]
+            recursivedelta(Sets[i][j],Worlds[i])
+        i = i+1
+    try:
+        Worlds[i+1];
+    except IndexError:
+        #next index does not exist
+        #break
+        #print "break at", (Sets[i]), "length is:", len(Sets[i][0])
+        try:
+            Sets[i][0];
+        except IndexError:
+            i = -1
+
 
 '''
     :recursively deal with all gamma formulaes
