@@ -76,33 +76,32 @@ def recursivedelta(psi,world):
 
 #print "sets " + str(Sets[0])
 
+# initial expansion of the original formula in the main world
 for set in reversed(Sets[0]):
     recursivedelta(set, Worlds[0])
-
-i = 1
-print num_of_worlds, len(Worlds)
-while i > 0:
-    #print "we got i: ", i
-    print "we are here", i, Worlds[i]
-
-    if len(Sets[i]) == 0:
-        i+=1;
-    else:
-        for j in range(0,len(Sets[i])):
-            print "we take: ", Sets[i][j], "and: ", Worlds[i]
-            recursivedelta(Sets[i][j],Worlds[i])
-        i = i+1
-    try:
-        Worlds[i+1];
-    except IndexError:
+# checking world by world and expanding existing diamond in all other worlds
+def recexp():
+    i = 1
+    while i > 0:
+        #print "we are here", i, Worlds[i]
+        if len(Sets[i]) == 0:
+            i+=1;
+        else:
+            for j in range(0,len(Sets[i])):
+                print "we take: ", Sets[i][j], "and: ", Worlds[i]
+                recursivedelta(Sets[i][j],Worlds[i])
+            i+=1
+        try:
+            Worlds[i+1];
+        except IndexError:
         #next index does not exist
         #break
-        #print "break at", (Sets[i]), "length is:", len(Sets[i][0])
-        try:
-            Sets[i][0];
-        except IndexError:
-            i = -1
+            try:
+                Sets[i][0];
+            except IndexError:
+                i = -1
 
+recexp()
 
 '''
     :recursively deal with all gamma formulaes

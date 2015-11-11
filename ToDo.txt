@@ -1,4 +1,5 @@
 —- Finish generating graph using gamma and delta rules so that every world is expanded
+	+ diamond working and generating worlds correctly
 —- Create function that returns worlds that are connected to a given world
 	- same for sets 
 —- Implement beta rules, so graph slip into two at the specific world
