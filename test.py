@@ -23,7 +23,7 @@ Sets = [];
 Input String:
 """
 #str_phi = "(#p ^ (@r ^ ~(r > #q)))^~@q"
-str_psi = "@r ^ (#s ^ @@#t)"
+str_psi = "((@r ^ t) ^ ~(@@s > @~s)) ^ (#r ^ @~r)"# ^ (@s ^ @@#t)"
 print(str_psi)
 
 """
@@ -43,9 +43,8 @@ Sets.append(sols.recursivealpha(psi))
     :recursively deal with all delta formulaes
     :formulas with following structure: <> p, ~[]p (diamond(p), not(box(p))
 '''
-num_of_worlds = 1;
+
 def recursivedelta(psi,world):
-    global num_of_worlds
     parsed_constants = ['or', 'and', 'imply', 'not']
     parsed_modalities = ['diamond', 'box']
 
@@ -55,7 +54,7 @@ def recursivedelta(psi,world):
         #    result = recursivedelta(psi[1])
         graph.addworld(Worlds);
         Sets[world-1].remove(psi);
-        num_of_worlds += 1;
+
         graph.addedge(Edges,world,Worlds);
         Sets.append(result);
         #print "final results: ", result
@@ -65,11 +64,11 @@ def recursivedelta(psi,world):
         print " we are here"
         psi1 = ('not', psi[1][1])
         result = [psi1]
-        if psi[1][1][0] in parsed_constants or psi[1][1][0] in parsed_modalities:
-            result = recursivedelta(psi1,Worlds[0])
+        #if psi[1][1][0] in parsed_constants or psi[1][1][0] in parsed_modalities:
+        #    result = recursivedelta(psi1,Worlds[0])
         graph.addworld(Worlds);
         Sets[world-1].remove(psi);
-        num_of_worlds += 1;
+
         graph.addedge(Edges,world,Worlds);
         Sets.append(result)
         return result
@@ -83,11 +82,17 @@ for set in reversed(Sets[0]):
 def recexp():
     i = 1
     while i > 0:
-        #print "we are here", i, Worlds[i]
         if len(Sets[i]) == 0:
             i+=1;
         else:
-            for j in range(0,len(Sets[i])):
+
+            for j in range(len(Sets[i])-1,-1,-1):
+                print "j= ",j, " i = ", i
+                try:
+                    Sets[i]
+                except:
+                    i = -1;
+                    break;
                 print "we take: ", Sets[i][j], "and: ", Worlds[i]
                 recursivedelta(Sets[i][j],Worlds[i])
             i+=1
@@ -112,20 +117,26 @@ def recursivegamma(psi,world):
     parsed_modalities = ['diamond', 'box']
     if psi[0] == 'box':
         result = psi[1]
-        #print "box form: ", result
+        print "box form: ", result
         if psi[1][0] in parsed_constants or psi[1][0] in parsed_modalities:
-            print psi
-            # if psi[1][0] == "diamond":
+            print "first check", psi
+            #if psi[1][0] == "diamond":
+            #    print "we we are", result
+            #    recexp();
+                #result = recursivedelta(result,world)
+
             #     Sets[world-1].remove(psi);
             #     result = recursivedelta(psi[1],Worlds[1])
             # else:
-            Sets[world-1].remove(psi);
-            result = recursivegamma(psi[1])
-        Sets[world-1].remove(psi);
+            #Sets[world-1].remove(psi);
+            #result = recursivegamma(psi[1],world)
+
         for i in range(0,len(Sets)-1):
             if Edges[i][0] == 1:
                 value= Edges[i][1]
+                print "here we adding", Sets[value-1], result
                 Sets[value-1].append(result)
+        Sets[world-1].remove(psi);
         return result
 
     elif psi[0] == 'not' and isinstance(psi[1], tuple) and psi[1][0] == 'diamond':
@@ -133,18 +144,24 @@ def recursivegamma(psi,world):
         psi1 = ('not', psi[1][1])
         result = psi1
         if psi[1][1][0] in parsed_constants or psi[1][1][0] in parsed_modalities:
-            result = recursivegamma(psi1)
+            #result = recursivegamma(psi1,world)
+            print "first check", psi
         for i in range(0,len(Sets)-1):
             if Edges[i][0] == 1:
                 value= Edges[i][1]
                 Sets[value-1].append(result)
         #for i in range(1,len(Sets)):
         #    Sets[i].append(result)
+        Sets[world-1].remove(psi);
         return result
 
 for set in reversed(Sets[0]):
     #print "set is: ", set
     recursivegamma(set,Worlds[0])
+print len(Sets[1])
+
+recexp()
+
 '''
 i = 1
 print num_of_worlds, len(Worlds)
@@ -171,7 +188,7 @@ while i < num_of_worlds:
 
 
 #print "formula with incosistencies: ", Sets
-remove = sols.inconsistent(Sets)
+#remove = sols.inconsistent(Sets)
 #print "formula without: ", remove, " worlds: ", Worlds
 
 '''
