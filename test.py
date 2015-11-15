@@ -23,7 +23,7 @@ Sets = [];
 Input String:
 """
 #str_phi = "(#p ^ (@r ^ ~(r > #q)))^~@q"
-str_psi = "((@r ^ t) ^ ~(@@s > @~s)) ^ (#r ^ @~r)"# ^ (@s ^ @@#t)"
+str_psi = "((r V t) ^ ~(@@#s > @~s)) ^ (#r ^ @~r)"# ^ (@s ^ @@#t)"
 print(str_psi)
 
 """
@@ -61,7 +61,7 @@ def recursivedelta(psi,world):
         return result
 
     elif psi[0] == 'not' and isinstance(psi[1], tuple) and psi[1][0] == 'box':
-        print " we are here"
+        #print " we are here"
         psi1 = ('not', psi[1][1])
         result = [psi1]
         #if psi[1][1][0] in parsed_constants or psi[1][1][0] in parsed_modalities:
@@ -87,7 +87,7 @@ def recexp():
         else:
 
             for j in range(len(Sets[i])-1,-1,-1):
-                print "j= ",j, " i = ", i
+                #print "j= ",j, " i = ", i
                 try:
                     Sets[i]
                 except:
@@ -106,7 +106,7 @@ def recexp():
             except IndexError:
                 i = -1
 
-recexp()
+
 
 '''
     :recursively deal with all gamma formulaes
@@ -117,9 +117,9 @@ def recursivegamma(psi,world):
     parsed_modalities = ['diamond', 'box']
     if psi[0] == 'box':
         result = psi[1]
-        print "box form: ", result
+        #print "box form: ", result
         if psi[1][0] in parsed_constants or psi[1][0] in parsed_modalities:
-            print "first check", psi
+            #print "first check", psi
             #if psi[1][0] == "diamond":
             #    print "we we are", result
             #    recexp();
@@ -131,12 +131,12 @@ def recursivegamma(psi,world):
             #Sets[world-1].remove(psi);
             #result = recursivegamma(psi[1],world)
 
-        for i in range(0,len(Sets)-1):
-            if Edges[i][0] == 1:
-                value= Edges[i][1]
-                print "here we adding", Sets[value-1], result
-                Sets[value-1].append(result)
-        Sets[world-1].remove(psi);
+            for i in range(0,len(Sets)-1):
+                if Edges[i][0] == 1:
+                    value= Edges[i][1]
+                    #print "here we adding", Sets[value-1], result
+                    Sets[value-1].append(result)
+            Sets[world-1].remove(psi);
         return result
 
     elif psi[0] == 'not' and isinstance(psi[1], tuple) and psi[1][0] == 'diamond':
@@ -145,11 +145,11 @@ def recursivegamma(psi,world):
         result = psi1
         if psi[1][1][0] in parsed_constants or psi[1][1][0] in parsed_modalities:
             #result = recursivegamma(psi1,world)
-            print "first check", psi
-        for i in range(0,len(Sets)-1):
-            if Edges[i][0] == 1:
-                value= Edges[i][1]
-                Sets[value-1].append(result)
+            #print "first check", psi
+            for i in range(0,len(Sets)-1):
+                if Edges[i][0] == 1:
+                    value= Edges[i][1]
+                    Sets[value-1].append(result)
         #for i in range(1,len(Sets)):
         #    Sets[i].append(result)
         Sets[world-1].remove(psi);
@@ -162,25 +162,6 @@ print len(Sets[1])
 
 recexp()
 
-'''
-i = 1
-print num_of_worlds, len(Worlds)
-while i < num_of_worlds:
-    #print "we are here", i, Worlds[i]
-    try:
-        Worlds[i+1];
-    except IndexError:
-        #next index does not exist
-        break
-    print len(Sets[i])
-    if len(Sets[i]) == 0:
-        i+=1;
-    else:
-        for j in range(0,len(Sets[i])):
-            #print "we take: ", Sets[i][j], "and: ", Worlds[i]
-            i +=1;
-            recursivedelta(Sets[i][j],Worlds[i])
-'''
 
 #test = [[('not', ('box', 'p')), ('box', 'p'), ('not', 'q'), ('q'), ('diamond', 'r')], [('or', ('p', 'q')),('not',('or',('p','q')))],['not',('or', ('p', 'q'))],['r', 'q']]
 
@@ -196,12 +177,18 @@ while i < num_of_worlds:
     :deleting non unique elements
     :passing data to graph function
 '''
+'''
+    :test edges and sets
+'''
+Edges2 = [(1, 2), (1, 3), (1, 4), (4, 5), (6, 7), (6, 8), (9, 10), (9, 11), (9, 12)]
+Sets2 = [[('or', 'r', 't')], [('not', 'r'), 'r'], [('not', 's'), 'r'], ['r'], [('box', 's')],[('box', 'a')],[('box', 'b')], [('box', 'c')], ['a'], ['b'], ['c'],['d']]
 G = nx.DiGraph()
 uniq_Sets = [list(OrderedDict.fromkeys(l)) for l in Sets]
 print "sets:" ,Sets
 print "edges: ",Edges
 print "worlds: ",Worlds
-graph.create_graph(G,Edges,uniq_Sets)
+#graph.create_graph(G,Edges2,uniq_Sets)
+graph.create_graph2(G,Edges2,Sets2)
 
 # H = G.copy();
 #G = nx.DiGraph()
