@@ -1,5 +1,7 @@
+# Auther: Marcin Cuber
+# All rights reserved
 # -*- coding: utf-8 -*-
-default_ascii =    [{'p','q','r','s','t'},
+default_ascii =    [{'p','q','r','s','t','u','v','w','x'},
                     # false, not, or, and, imply
                     ['F', '~', 'V', '^', '>'],
                     # diamond, box
@@ -166,8 +168,14 @@ def formula_to_string(formula):
         string = formula[0]
     else:
         # If the main operator is unary, handle it.
+
         if len(formula) == 2:
-            string = '~'
+            if formula[0] == 'box':
+                string = '[]'
+            elif formula[0] == 'diamond':
+                string = '<>'
+            else:
+                string = '~'
         else:
             string = ''
 
@@ -186,6 +194,10 @@ def formula_to_string(formula):
                 string += ' V '
             elif formula[0] == 'imply':
                 string += ' -> '
+            elif formula[0] == 'box':
+                string += ' [] '
+            elif formula[0] == 'diamond':
+                string+= ' <> '
 
             # Handle the second operand.
             if len(formula[2]) < 3:
