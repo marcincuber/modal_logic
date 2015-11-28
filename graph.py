@@ -20,7 +20,7 @@ def create_graph2(G,nodes,Sets):
         node_colours.append('b')
     nx.draw(G,node_list = nodes,node_color=node_colours, labels=custom_labels, node_size=1000, with_labels = True)
 
-    plt.savefig("original_graph.png")
+    #plt.savefig("original_graph.png")
     plt.show()
     G_comp = nx.weakly_connected_component_subgraphs(G)
     '''

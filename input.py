@@ -21,7 +21,7 @@
 '''
     :input string
 '''
-str_psi = "~(p > #r) ^  (@p >((@@@s^#t) V (#s ^ @q))) "
+str_psi = "(@q^(@p > ~#r)) ^  (@p V (#s ^ @q)) "
 
 
 
@@ -31,5 +31,5 @@ str_psi = "~(p > #r) ^  (@p >((@@@s^#t) V (#s ^ @q))) "
 def receive():
     send_string = str_psi
     return send_string
-execfile('main_run.py')
+#execfile('main_run.py')
 

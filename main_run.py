@@ -26,8 +26,8 @@ Sets = [];
 Input String:
 """
 #str_phi = "(#p ^ (@r ^ ~(r > #q)))^~@q"
-#str_psi = "~(p > #r) ^  (@p >((@@@s^#t) V (#s ^ @q))) "# ^ (@s ^ @@#t)"
-str_psi = input.receive()
+str_psi = "(@q^(@p > ~##r)) ^  (@p V (#s ^ @q))"# ^ (@s ^ @@#t)"
+#str_psi = input.receive()
 print(str_psi)
 
 """
@@ -376,12 +376,13 @@ if index_inconsistent is not []:
         del Graphs[num];
 
 for graph in Graphs:
-    #dealing with gamma formulaes box and not diamond
+    #alpha
     for node in graph.nodes():
         alpha_list = graph.node[node]
         set = alpha_node(alpha_list)
-
         graph.node[node] = set
+    #dealing with gamma formulaes box and not diamond
+    '''
     for node in graph.nodes():
         gamma_list = graph.node[node]
         neighbors = graph.neighbors(node)
@@ -399,6 +400,7 @@ for graph in Graphs:
                 for num in neighbors:
                     graph.node[num].append(sub)
                     print graph.node[num]
+    '''
     #delta
     for node in graph.nodes():
         delta_list = graph.node[node]
@@ -445,6 +447,24 @@ for graph in Graphs:
                             graph.node[new_node].append(formula)
                         elif set[j][0] == 'box':
                             graph.node[new_node].append(set[j][1])
+
+    for node in graph.nodes():
+        gamma_list = graph.node[node]
+        neighbors = graph.neighbors(node)
+        for i in range(0,len(gamma_list)):
+            part1 = gamma_list[i]
+
+            if isinstance(part1, tuple) and part1[0] == 'box':
+                part2 = gamma_list[i][1]
+                for num in neighbors:
+                    graph.node[num].append(part2)
+
+            elif isinstance(part1, tuple) and part1[0] == 'not' and part1[1][0] == 'diamond':
+                part2 = gamma_list[i][1][1]
+                sub = ('not',part2)
+                for num in neighbors:
+                    graph.node[num].append(sub)
+                    print graph.node[num]
 #finding inconsistencies in the model
 index_inconsistent =[]
 for i in range(0,len(Graphs)):
