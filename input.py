@@ -21,15 +21,16 @@
 '''
     :input string
 '''
-str_psi = "(@q^(@p > ~#r)) ^  (@p V (#s ^ @q)) "
+str_psi = "@r ^~((#(p > q) >  (#p > @q)))"
 
 
 
 '''
     :function that passes the input.py string to the executing file
 '''
-def receive():
+
+def Logic_K_receive():
     send_string = str_psi
     return send_string
-#execfile('main_run.py')
+#execfile('Logic_K.py')
 

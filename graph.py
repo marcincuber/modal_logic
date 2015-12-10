@@ -4,8 +4,9 @@ __author__ = 'marcincuber'
 import networkx as nx
 import matplotlib.pyplot as plt
 
-def create_graph2(G,nodes,Sets):
+def create_graph_K(G,nodes,Sets):
     G.add_edges_from(nodes)
+
 
     #value assigned to each world
     custom_labels={}
@@ -48,6 +49,26 @@ def create_graph2(G,nodes,Sets):
         custom_number += len(comp)
         i += 1
     '''
+def create_graph_T(G,nodes,Sets):
+    G.add_edges_from(nodes)
+    G.add_edge(1,1)
+
+    #value assigned to each world
+    custom_labels={}
+    custom_node_sizes={}
+    node_colours=['y']
+    custom_node_colours = {}
+
+    for i in range(0, len(Sets)):
+        custom_labels[i+1] = Sets[i]
+        G.node[i+1] = Sets[i]
+        custom_node_sizes[i+1] = 5000
+        node_colours.append('b')
+    nx.draw(G,node_list = nodes,node_color=node_colours, labels=custom_labels, node_size=1000, with_labels = True)
+
+    #plt.savefig("original_graph.png")
+    plt.show()
+    G_comp = nx.weakly_connected_component_subgraphs(G)
 def addedge(edges,world,Worlds):
     #print "here we are adding to world: ",world
     lengthmain = len(Worlds)

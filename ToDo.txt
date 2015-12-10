@@ -1,2 +1,17 @@
-K logic has been completed
--testing needs to be done, perhaps small errors can occure
+Modal logic:
+K: has been completed
+    no properties
+T: partly done
+    reflexive   []p -> p
+B: not started
+    symmetric   p -> []<>p
+BB: not started
+    symmetric and reflexive
+S4: not started
+    reflexive and transitive    []p -> [][]p
+S5: not started
+    S4 + <>p ->[]<>p
+S4.3: not started
+    same as S4 but additionally linear
+
+-testing needs to be done, perhaps small errors can occur

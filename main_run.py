@@ -26,7 +26,7 @@ Sets = [];
 Input String:
 """
 #str_phi = "(#p ^ (@r ^ ~(r > #q)))^~@q"
-str_psi = "(@q^(@p > ~##r)) ^  (@p V (#s ^ @q))"# ^ (@s ^ @@#t)"
+#str_psi = "(@q^(@p > ~##r)) ^  (@p V (#s ^ @q))"# ^ (@s ^ @@#t)"
 #str_psi = input.receive()
 print(str_psi)
 
@@ -37,7 +37,7 @@ psi = syntax.parse_formula(BML, str_psi)
 
 print "psi      " + str(psi)
 
-#print "result === ", sols.recursivealpha(psi)
+print "result === ", sols.recursivealpha(psi)
 
 Sets.append(sols.recursivealpha(psi))
 
