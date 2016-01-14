@@ -1,0 +1,23 @@
+Tested cases:
+    Logic_K.py:
+
+
+    Logic_T.py:
+
+
+
+    Logic_Symmetric.py:
+        1. (@p ^###q) ^ (@s ^ ~###@t)
+        2. (@p ^#q) V (@s ^ ~#@t)
+        3. (@p > #q) ^ ~(@s > ~#@t)
+        4. ~((@p > #q) ^ ~(@s > ~#@t))
+        5. ~(~(@p > #q) ^ (@s > ~#@t))
+        6. ~p ^ @q
+        7. ~#p ^ @q
+        8. @s ^ (~#p ^ #@q)
+        9. @s > (~#p ^ #@q)
+        10. @#s > (@~#p ^ ##@q)    NOTE: This example goes into infinite loop using tableaux method.
+                                         To fix this my program detects such issue and adds an edge to the node with the same value
+        11. (@#s > @t) > (@~#p ^ ##@q)  NOTE: similar to example 10, infinite loop is detected
+
+        12. (@#s > @t) ^ (@~#p ^ ##@q) IT IS NOT SOLVED I am working on the solution... one model generates correctly but the other does not terminate
