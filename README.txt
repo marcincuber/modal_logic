@@ -4,18 +4,20 @@ This is a Propositional Modal Logic solver for following logics:
 
 K: has been completed - Logic_K.py can be used to test formulas
     no properties
-T: partly done - Logic_T.py will shortly be available to test formulas
+T: completed - Logic_T.py
     reflexive   []p -> p
-B: not started
+KB: Logic_Symmetric- almost completed
     symmetric   p -> []<>p
-BB: not started
+B: not started
     symmetric and reflexive
 S4: not started
     reflexive and transitive    []p -> [][]p
 S5: not started
+    reflexive, transitive and symmetric
     S4 + <>p ->[]<>p
 S4.3: not started
     same as S4 but additionally linear
+
 
 
 How to use:
