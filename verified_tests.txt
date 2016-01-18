@@ -16,8 +16,7 @@ Tested cases:
         7. ~#p ^ @q
         8. @s ^ (~#p ^ #@q)
         9. @s > (~#p ^ #@q)
-        10. @#s > (@~#p ^ ##@q)    NOTE: This example goes into infinite loop using tableaux method.
-                                         To fix this my program detects such issue and adds an edge to the node with the same value
-        11. (@#s > @t) > (@~#p ^ ##@q)  NOTE: similar to example 10, infinite loop is detected
-
-        12. (@#s > @t) ^ (@~#p ^ ##@q) IT IS NOT SOLVED I am working on the solution... one model generates correctly but the other does not terminate
+        10. @#s > (@~#p ^ ##@q)
+        11. (@#s > @t) > (@~#p ^ ##@q)
+        12. (@#s > @t) ^ (@~#p ^ ##@q)
+        13. (@#s > @t) V (@~#p ^ ##@q)
