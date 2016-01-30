@@ -1,12 +1,14 @@
 Modal logic:
-K: has been completed
+K: finished
     no properties
-T: partly done
+T: finished
     reflexive   []p -> p
-B: not started
+B: finished
     symmetric   p -> []<>p
-BB: not started
+BT: finished
     symmetric and reflexive
+K4: almost finished
+    Transitive
 S4: not started
     reflexive and transitive    []p -> [][]p
 S5: not started

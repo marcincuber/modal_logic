@@ -28,8 +28,7 @@ Sets = [];
 """
 Input String:
 """
-#str_phi = "(#p ^ (@r ^ ~(r > #q)))^~@q"
-#str_psi = "@r^((@#@p ^ @#q) > @(p ^ q))"
+
 str_psi = "@p ^ ##@s"
 print(str_psi)
 
@@ -253,6 +252,8 @@ def delta_node(graph):
                 graph.node[node] = delta_list
                 #graph.node[node].remove(sub)
                 graph.node[new_node] = [part2]
+                alpha_node(graph)
+                beta_node(graph)
 
                 #scan backwards
                 #print "this node was added", graph.node[new_node]
@@ -279,6 +280,8 @@ def delta_node(graph):
                 graph.node[node] = delta_list
                 #graph.node[node].remove(sub)
                 graph.node[new_node] = [part2]
+                alpha_node(graph)
+                beta_node(graph)
 
                 previous = graph.predecessors(new_node)
                 for num in previous:
@@ -459,29 +462,6 @@ for graph in Graphs:
     number_graph +=1
 
 
-'''
-    :now we dealt with all the formulas in our main-original graph we can now deal with all graphs one by one
-    :graphs are stored as classes in Graphs list
-    :for each graph we are going to determine if they are satisfiable, if yes expand them, if not delete
-'''
-'''
-for i in range(0,3):
-    for graph in Graphs:
-
-        #dealing with alpha formulaes
-        alpha_node(graph)
-
-    for graph in Graphs:
-        #dealing with beta formulaes
-        beta_node(graph)
-
-#for i in range(0,5):
-    for graph in Graphs:
-    #dealing with delta and gamma formulaes
-        delta_node(graph)
-        remove_dups_graph(graph)
-
-'''
 #finding inconsistencies in the model
 index_inconsistent =[]
 for i in range(0,len(Graphs)):
@@ -495,7 +475,7 @@ for i in range(0,len(Graphs)):
             index_inconsistent.append(i)
         else:
             status == False
-
+index_inconsistent = list(set(index_inconsistent))
 # removing inconsistent graphs- models
 if index_inconsistent is not []:
     for num in reversed(index_inconsistent):

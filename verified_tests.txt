@@ -20,3 +20,8 @@ Tested cases:
         11. (@#s > @t) > (@~#p ^ ##@q)
         12. (@#s > @t) ^ (@~#p ^ ##@q)
         13. (@#s > @t) V (@~#p ^ ##@q)
+
+    Logic_K4_transitive.py:
+        1. ((@@q ^ #t) V (#@s ^ ~#t))
+        2. @s ^ (~#p ^ #@q)
+        3. (@#s ^ #@q)

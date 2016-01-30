@@ -251,6 +251,9 @@ def delta_node_solve(graph,node):
             graph.node[node] = delta_list
             #graph.node[node].remove(sub)
             graph.node[new_node] = [part2]
+            #solve for alpha and beta
+            alpha_node(graph)
+            beta_node(graph)
 
 
             previous = graph.predecessors(new_node)
@@ -274,10 +277,13 @@ def delta_node_solve(graph,node):
             graph.add_edge((new_node),(node))
             #### do not remove!!!
             #delta_list.remove(sub)
-            #print "list is: ", delta_list
+
             graph.node[node] = delta_list
             #graph.node[node].remove(sub)
             graph.node[new_node] = [part2]
+            #solve for alpha and beta
+            alpha_node(graph)
+            beta_node(graph)
 
             previous = graph.predecessors(new_node)
             for num in previous:
@@ -522,7 +528,7 @@ for i in range(0,len(Graphs)):
             index_inconsistent.append(i)
         else:
             status == False
-
+index_inconsistent = list(set(index_inconsistent))
 # removing inconsistent graphs- models
 if index_inconsistent is not []:
     for num in reversed(index_inconsistent):

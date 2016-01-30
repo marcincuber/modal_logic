@@ -319,6 +319,7 @@ for i in range(0,len(Graphs)):
         else:
             status == False
 
+index_inconsistent = list(set(index_inconsistent))
 # removing inconsistent graphs- models
 if index_inconsistent is not []:
     for num in reversed(index_inconsistent):
