@@ -29,7 +29,7 @@ Sets = [];
 Input String:
 """
 
-str_psi = "(@@#s V ##@q)"
+str_psi = "(#p ^ #@t)^ @q"
 print(str_psi)
 
 """
@@ -536,6 +536,7 @@ for graph in Graphs:
     while status == 1:
         for node in range(index,len(graph.nodes())+1):
             start_length = len(graph.nodes())
+
             alpha_node_solve(graph,node)
             remove_dups_graph(graph)
 
@@ -552,7 +553,7 @@ for graph in Graphs:
             value_list = graph.node[node]
             current_length = len(graph.nodes())
 
-            for i in range (current_length, 1, -1):
+            for i in range (current_length, current_length-3, -1):
                 #print "value for i is: ", i
                 if node != i:
                     value_at_previous_node = graph.node[i]

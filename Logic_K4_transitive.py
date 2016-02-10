@@ -550,7 +550,7 @@ for graph in Graphs:
             value_list = graph.node[node]
             current_length = len(graph.nodes())
 
-            for i in range (current_length, 1, -1):
+            for i in range (current_length, 0, -1):
                 #print "value for i is: ", i
                 if node != i:
                     value_at_previous_node = graph.node[i]
