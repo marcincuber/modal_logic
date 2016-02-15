@@ -62,7 +62,6 @@ def recursivealpha(psi):
         psi2_set = [('not', psi[1][2])]
         if psi[1][2][0] in parsed_constants or psi[1][2][0] in parsed_modalities:
             psi2_set = recursivealpha(psi2)
-        print "psi1_set + psi2_set", psi1_set + psi2_set
         return psi1_set + psi2_set
 
     else:
@@ -72,22 +71,6 @@ def recursivealpha2(psi):
     parsed_constants = ['or', 'and', 'imply', 'not']
     parsed_modalities = ['diamond', 'box']
 
-    # print "Hallo " + str(psi) + " len " + str(len(psi))
-
-    # if psi[0] == 'or':
-    #     psi1_set = [psi[1]]
-    #     if psi[1] in parsed_constants or psi[1] in parsed_modalities:
-    #         psi1_set = recursivealpha(psi[1])
-    #
-    #     psi2_set = [psi[2]]
-    #     if psi[2] in parsed_constants or psi[2] in parsed_modalities:
-    #         psi2_set = recursivealpha(psi[2])
-    #
-    #     return psi1_set + psi2_set
-
-    #print psi[0]
-    #print psi[1]
-
     if psi[0] == 'and':
         psi1_set = [psi[1]]
         if psi[1][0] in parsed_constants or psi[1][0] in parsed_modalities:
@@ -96,12 +79,6 @@ def recursivealpha2(psi):
         psi2_set = [psi[2]]
         if psi[2][0] in parsed_constants or psi[2][0] in parsed_modalities:
             psi2_set = recursivealpha(psi[2])
-
-        # result = []
-
-        # for psi1 in psi1_set:
-        #     for psi2 in psi2_set:
-        #         result.append(psi1 + psi2)
 
         return psi1_set + psi2_set
 

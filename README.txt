@@ -8,18 +8,18 @@ K:  has been completed - Logic_K.py can be used to test formulas
 T:  completed - Logic_T.py
     reflexive   []p -> p
 
-K4: completed
+K4: completed- almost - transitive frames
 
-B:  Completed - Logic_Symmetric
+KB:  Completed - Logic_Symmetric
     symmetric   p -> []<>p
 
-KB: Completed
+B: Completed
     symmetric and reflexive
 
 S4: started
     reflexive and transitive    []p -> [][]p
 
-S5: not started
+S5: finished
     reflexive, transitive and symmetric
     S4 + <>p ->[]<>p
 

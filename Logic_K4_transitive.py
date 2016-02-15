@@ -106,6 +106,7 @@ def alpha_node_solve(graph,node):
 
         elif isinstance(value_list[i], str):
             set.append(value_list[i])
+    graph.node[node] = set
 '''
     :resolving BETAS given a GRAPH
 '''

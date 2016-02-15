@@ -5,39 +5,43 @@ import sols
 import graph
 import networkx as nx
 import matplotlib.pyplot as plt
-import input
+import copy
 
 from collections import OrderedDict
 
 '''
-    :Solving Modal Logic Symmetric - symmetric and NOT reflexive relation
+    :Modal Logic KB- symmetric frames
 '''
-"""
+'''
 Sybmol import
-"""
+'''
 BML = syntax.Language(*syntax.default_ascii)
 
-"""
+'''
 Arrays to store the number of worlds and sets that correspond to each world
-"""
+'''
 Graphs = [];
 Worlds = [1];
 Edges = [];
 Sets = [];
+graph_formulas = []
 
-"""
+formulas = {}
+formulas[1] = []
+graph_formulas.append(formulas)
+temp_graph_formulas =[]
+
+'''
 Input String:
-"""
+'''
+str_psi = "~(@#@#(@u ^ #@s) > ~#~@r) "
+print "formula input: ", (str_psi)
 
-str_psi = "(@#s > @t) V (@~#p ^ ##@q)"
-print(str_psi)
-
-"""
+'''
 Parsed string into tuple and list
-"""
+'''
 psi = syntax.parse_formula(BML, str_psi)
-
-print "psi      " + str(psi)
+print psi
 
 Sets.append(sols.recursivealpha(psi))
 
@@ -49,10 +53,13 @@ Sets.append(sols.recursivealpha(psi))
 G = nx.MultiDiGraph()
 uniq_Sets = [list(OrderedDict.fromkeys(l)) for l in Sets]
 
-graph.create_graph_symmetric(G,Edges,uniq_Sets)
+graph.create_graph_K(G,Edges,uniq_Sets)
 Graphs.append(G)
 
-#function to remove duplicates from the list
+
+'''
+    :functions to remove duplicates from the list
+'''
 def remove_duplicates(lista):
     return list(set(lista))
 
@@ -71,7 +78,6 @@ def alpha_node(graph):
         for i in range(0,len(value_list)):
             if isinstance(value_list[i], tuple):
                 alpha = sols.recursivealpha(value_list[i])
-                #print "alpha value is:", alpha
                 if isinstance(alpha[0], tuple):
                     set.append(alpha[0])
                     if len(alpha) > 1:
@@ -86,15 +92,12 @@ def alpha_node(graph):
     :resolving ALPHAS given a NODE in graph
 '''
 def alpha_node_solve(graph,node):
-    set = []
+    set = [] # array to store expanded alphas
     value_list = graph.node[node]
-    #print "here we have: ", value_list, "its size is: ", len(value_list)
 
     for i in range(0,len(value_list)):
         if isinstance(value_list[i], tuple):
             alpha = sols.recursivealpha(value_list[i])
-
-            #print "alpha value is:", alpha
             if isinstance(alpha[0], tuple):
                 set.append(alpha[0])
                 if len(alpha) > 1:
@@ -105,19 +108,16 @@ def alpha_node_solve(graph,node):
 
         elif isinstance(value_list[i], str):
             set.append(value_list[i])
-    #graph.node[node] = remove_duplicates(set)
-
+    graph.node[node] = set
 '''
-    :resolving BETAS given a GRAPH
+    :resolving BETAS given a NODE in graph
 '''
-def beta_node(graph):
-    for node in graph.nodes():
-        value_list = graph.node[node]
-        #print "here value_list = ", value_list, "for node =", i, "length of list is: ", len(value_list)
-        for i in range(0,len(value_list)):
-            value = value_list[i]
+def beta_node_solve(graph, node, formulas_in):
+    value_list = graph.node[node]
+    for i in range(0,len(value_list)):
+        value = value_list[i]
+        if value not in formulas_in[node]:
 
-            ###ADD scaning through the list of propositions
             if value[0] =='or':
                 part1 = value[1]
                 part2 = value[2]
@@ -126,12 +126,32 @@ def beta_node(graph):
                 comp2.node[node].remove(value)
                 graph.node[node].append(part1)
                 comp2.node[node].append(part2)
-
                 Graphs.append(comp2)
+
+                formulas_in[node].append(value)
+                copy_formulas_in = copy.deepcopy(formulas_in)
+                graph_formulas.append(copy_formulas_in)
+
                 for graph in Graphs:
-                    #dealing with alpha formulaes
                     alpha_node(graph)
-                #break
+
+            elif value_list[i] == 'or':
+                part1 = value_list[i+1]
+                part2 = value_list[i+2]
+                comp2 = graph.copy()
+                graph.node[node] = []
+                comp2.node[node] = []
+                graph.node[node].append(part1)
+                comp2.node[node].append(part2)
+                Graphs.append(comp2)
+
+                formulas_in[node].append(value)
+                copy_formulas_in = copy.deepcopy(formulas_in)
+                graph_formulas.append(copy_formulas_in)
+
+                for graph in Graphs:
+                    alpha_node(graph)
+
             elif value[0] == 'not' and value[1][0] == 'and':
                 part1 = value[1][1]
                 part2 = value[1][2]
@@ -144,165 +164,165 @@ def beta_node(graph):
                 graph.node[node].append(left_part)
                 comp2.node[node].append(right_part)
                 Graphs.append(comp2)
+
+                formulas_in[node].append(value)
+                copy_formulas_in = copy.deepcopy(formulas_in)
+                graph_formulas.append(copy_formulas_in)
+
                 for graph in Graphs:
-                    #dealing with alpha formulaes
                     alpha_node(graph)
-                #break
+
             elif value[0] == 'imply':
+                print value[0]
+                print value[1]
+                print value[2]
                 part1 = value[1]
                 part2 = value[2]
-                left_part = ('not',part1)
+                if part1[0] == 'not':
+                    left_part = part1[1]
+                else:
+                    left_part = ('not',part1)
                 comp2 = graph.copy()
                 graph.node[node].remove(value)
                 comp2.node[node].remove(value)
                 graph.node[node].append(left_part)
                 comp2.node[node].append(part2)
                 Graphs.append(comp2)
-                #break
-'''
-    :resolving BETAS given a NODE in graph
-'''
-def beta_node_solve(graph, node):
-    value_list = graph.node[node]
-    #print "here value_list = ", value_list, "for node =", i, "length of list is: ", len(value_list)
-    for i in range(0,len(value_list)):
-        value = value_list[i]
-        ###ADD scaning through the list of propositions
-        if value[0] =='or':
-            part1 = value[1]
-            part2 = value[2]
-            comp2 = graph.copy()
-            graph.node[node].remove(value)
-            comp2.node[node].remove(value)
-            graph.node[node].append(part1)
-            comp2.node[node].append(part2)
-            Graphs.append(comp2)
-            for graph in Graphs:
-                #dealing with alpha formulaes
-                alpha_node(graph)
-            #break
-        elif value[0] == 'not' and value[1][0] == 'and':
-            part1 = value[1][1]
-            part2 = value[1][2]
 
-            left_part = ('not',part1)
-            right_part = ('not',part2)
-            comp2 = graph.copy()
-            graph.node[node].remove(value)
-            comp2.node[node].remove(value)
-            graph.node[node].append(left_part)
-            comp2.node[node].append(right_part)
-            Graphs.append(comp2)
-            for graph in Graphs:
-                #dealing with alpha formulaes
-                alpha_node(graph)
-            #break
-        elif value[0] == 'imply':
-            part1 = value[1]
-            part2 = value[2]
-            left_part = ('not',part1)
-            comp2 = graph.copy()
-            graph.node[node].remove(value)
-            comp2.node[node].remove(value)
-            graph.node[node].append(left_part)
-            comp2.node[node].append(part2)
-            Graphs.append(comp2)
-            #break
-        elif value_list[i] == 'imply':
-            part1 = value_list[i+1]
-            part2 = value_list[i+2]
-            left_part = ('not',part1)
-            comp2 = graph.copy()
-            graph.node[node] = []
-            comp2.node[node] = []
-            graph.node[node].append(left_part)
-            comp2.node[node].append(part2)
-            Graphs.append(comp2)
-            #break
-        elif value_list[i] == 'or':
-            part1 = value_list[i+1]
-            part2 = value_list[i+2]
-            comp2 = graph.copy()
-            graph.node[node] = []
-            comp2.node[node] = []
-            graph.node[node].append(part1)
-            comp2.node[node].append(part2)
-            Graphs.append(comp2)
-            #break
+                formulas_in[node].append(value)
+                copy_formulas_in = copy.deepcopy(formulas_in)
+                graph_formulas.append(copy_formulas_in)
+
+                for graph in Graphs:
+                    alpha_node(graph)
+
+            elif value_list[i] == 'imply':
+                part1 = value_list[i+1]
+                part2 = value_list[i+2]
+                left_part = ('not',part1)
+                comp2 = graph.copy()
+                graph.node[node] = []
+                comp2.node[node] = []
+                graph.node[node].append(left_part)
+                comp2.node[node].append(part2)
+                Graphs.append(comp2)
+
+                formulas_in.append(value)
+                copy_formulas_in = copy.deepcopy(formulas_in)
+                graph_formulas.append(copy_formulas_in)
+
+                for graph in Graphs:
+                    alpha_node(graph)
 
 '''
     :resolving DELTAS given a NODE in graph
 '''
-def delta_node_solve(graph,node):
+def delta_node_solve(graph, node, formulas_in):
     delta_list = graph.node[node]
-    #print "starting delta is: ", delta_list
+
     for i in range(len(delta_list)-1,-1,-1):
         part1 = delta_list[i][0]
         if part1 == 'diamond':
             sub = delta_list[i]
-            part2 = delta_list[i][1]
-            new_node= graph.number_of_nodes()+1
-            #adding new world
-            graph.add_edge(node,(new_node))
-            #adding symmetric edge
-            graph.add_edge((new_node),node)
-            #### do not remove!!!
-            #delta_list.remove(sub)
-            graph.node[node] = delta_list
-            #graph.node[node].remove(sub)
-            graph.node[new_node] = [part2]
-            #solve for alpha and beta
-            alpha_node(graph)
-            beta_node(graph)
+            if sub not in formulas_in[node]:
+                formulas_in[node].append(sub)
+                part2 = delta_list[i][1]
+                new_node= graph.number_of_nodes()+1
+                graph.add_edge(node,(new_node)) #adding new world and relation Rxx'
+                graph.add_edge((new_node), node) #add symmetric edge
 
+                graph.node[node] = delta_list
 
-            previous = graph.predecessors(new_node)
-            for num in previous:
-                set = graph.node[num];
-                for j in range(0,len(set)):
-                    if set[j][0] == 'not' and set[j][1][0] == 'diamond':
-                        formula = ('not',set[j][1][1])
-                        #print "here print: ", formula
-                        graph.node[new_node].append(formula)
-                    elif set[j][0] == 'box':
-                        graph.node[new_node].append(set[j][1])
+                graph.node[new_node] = [part2]
+                formulas_in[new_node] = []
+                alpha_node_solve(graph, node)
+                beta_node_solve(graph, node, formulas_in)
+
+                previous = graph.predecessors(new_node)
+                for num in previous:
+                    set = graph.node[num];
+                    for j in range(0,len(set)):
+                        if set[j][0] == 'not' and set[j][1][0] == 'diamond':
+                            formula = ('not',set[j][1][1])
+                            if formula not in graph.node[new_node]:
+                                graph.node[new_node].append(formula)
+                                alpha_node_solve(graph, new_node)
+                                beta_node_solve(graph, new_node, formulas_in)
+                        elif set[j][0] == 'box':
+                            if set[j][1] not in graph.node[new_node]:
+                                graph.node[new_node].append(set[j][1])
+                                alpha_node_solve(graph, new_node)
+                                beta_node_solve(graph, new_node, formulas_in)
 
         elif part1 == 'not' and delta_list[i][1][0] == 'box':
             sub = delta_list[i]
-            part2 = ('not', delta_list[i][1][1])
-            new_node= graph.number_of_nodes()+1
-            #adding new world
-            graph.add_edge(node,(new_node))
-            #adding recursive edge
-            graph.add_edge((new_node),(node))
-            #### do not remove!!!
-            #delta_list.remove(sub)
+            if sub not in formulas_in[node]:
+                formulas_in[node].append(sub)
+                part2 = ('not', delta_list[i][1][1])
+                new_node= graph.number_of_nodes()+1
+                graph.add_edge(node,(new_node)) #adding new world and relation Rxx'
+                graph.add_edge((new_node), node) #add symmetric edge
 
-            graph.node[node] = delta_list
-            #graph.node[node].remove(sub)
-            graph.node[new_node] = [part2]
-            #solve for alpha and beta
-            alpha_node(graph)
-            beta_node(graph)
+                graph.node[node] = delta_list
+                graph.node[new_node] = [part2]
+                formulas_in[new_node] = []
+                alpha_node_solve(graph, node)
+                beta_node_solve(graph, node, formulas_in)
 
-            previous = graph.predecessors(new_node)
-            for num in previous:
-                set = graph.node[num];
-                for j in range(0,len(set)):
-                    if set[j][0] == 'not' and set[j][1][0] == 'diamond':
-                        formula = ('not',set[j][1][1])
-                        #print "here print: ", formula
-                        graph.node[new_node].append(formula)
+                previous = graph.predecessors(new_node)
+                for num in previous:
+                    set = graph.node[num];
+                    for j in range(0,len(set)):
+                        if set[j][0] == 'not' and set[j][1][0] == 'diamond':
+                            formula = ('not',set[j][1][1])
+                            if formula not in graph.node[new_node]:
+                                graph.node[new_node].append(formula)
+                                alpha_node_solve(graph, new_node)
+                                beta_node_solve(graph, new_node, formulas_in)
+                        elif set[j][0] == 'box':
+                            if set[j][1] not in graph.node[new_node]:
+                                graph.node[new_node].append(set[j][1])
+                                alpha_node_solve(graph, new_node)
+                                beta_node_solve(graph, new_node, formulas_in)
+'''
+    :solving gammas at a NODE in graph
+'''
+def reflexive_gamma_node(graph, node, formulas_in):
 
-                    elif set[j][0] == 'box':
-                        #print "we added: ", (set[j][1]), " to new node: ", new_node
-                        graph.node[new_node].append(set[j][1])
+    value_list = graph.node[node]
+    #print "size is: ", len(value_list), value_list
+    size = len(graph.node[node])
+    status = 1;
+    index = 0;
+    while status == 1:
+        for i in range(index,size):
+            value = value_list[i]
+            if value[0] == 'box':
+                formula = value[1]
+                if value not in formulas_in[node]:
+                    formulas_in[node].append(value)
+                    if formula not in graph.node[node]:
+                        graph.node[node].append(formula)
 
+            elif value[0] == 'not' and value[1][0] == "diamond":
+                formula = ('not', value[1][1])
+                if value not in formulas_in[node]:
+                    formulas_in[node].append(value)
+                    if formula not in graph.node[node]:
+                        graph.node[node].append(formula)
+        new_size = len(graph.node[node])
+
+        if size == new_size:
+            status = 0;
+        else:
+            diff = new_size - size
+            index = len(graph.node[node])-diff
+            size = new_size
 
 '''
     :solving gammas at a NODE in graph
 '''
-def symmetric_gamma_node(graph, node):
+def symmetric_gamma_node(graph, node, formulas_in):
 
     value_list = graph.node[node]
     size = len(value_list)
@@ -311,7 +331,6 @@ def symmetric_gamma_node(graph, node):
         value = value_list[i]
         if value[0] == 'box':
             formula = value[1]
-            #find previous node and add box formula to it
             try:
                 graph.successors(node)
             except:
@@ -324,8 +343,10 @@ def symmetric_gamma_node(graph, node):
                     initial_size = len(graph.node[single_node])
                     if formula not in graph.node[single_node]:
                         graph.node[single_node].append(formula)
+
                     alpha_node_solve(graph,single_node)
-                    beta_node_solve(graph,single_node)
+                    beta_node_solve(graph,single_node, formulas_in)
+
                     final_size = len(graph.node[single_node])
                     #take diff to scan for these new entries
                     diff_size = final_size-initial_size
@@ -337,7 +358,6 @@ def symmetric_gamma_node(graph, node):
                             if isinstance(value,tuple) and value[0] == 'box':
                                 part = value[1]
                                 if part not in graph.node[node]:
-                                    print "this formula is not in the node yet:", part
                                     graph.node[node].append(part)
 
                             elif isinstance(value,tuple) and value[0] == 'not' and value[1][0] == 'diamond':
@@ -352,8 +372,8 @@ def symmetric_gamma_node(graph, node):
                                 graph.add_edge(single_node,(new_node))
                                 #adding symmetric edge
                                 graph.add_edge((new_node),single_node)
-                                #### do not remove!!!
-                                #value_list_single_node_initial.remove(value)
+
+                                formulas_in[new_node] = []
                                 graph.node[single_node] = value_list_single_node_initial
                                 graph.node[new_node] = [part]
 
@@ -364,10 +384,15 @@ def symmetric_gamma_node(graph, node):
                                     for j in range(0,len(set)):
                                         if set[j][0] == 'not' and set[j][1][0] == 'diamond':
                                             formula = ('not',set[j][1][1])
-                                            #print "here print: ", formula
-                                            graph.node[new_node].append(formula)
+                                            if formula not in graph.node[new_node]:
+                                                graph.node[new_node].append(formula)
+                                                alpha_node_solve(graph,new_node)
+                                                beta_node_solve(graph,new_node, formulas_in)
                                         elif set[j][0] == 'box':
-                                            graph.node[new_node].append(set[j][1])
+                                            if set[j][1] not in graph.node[new_node]:
+                                                graph.node[new_node].append(set[j][1])
+                                                alpha_node_solve(graph,new_node)
+                                                beta_node_solve(graph,new_node, formulas_in)
                             elif isinstance(value,tuple) and value[0] == 'not' and value[1][0] == 'box':
                                 part = ('not', value[1][1])
                                 new_node= graph.number_of_nodes()+1
@@ -375,8 +400,8 @@ def symmetric_gamma_node(graph, node):
                                 graph.add_edge(single_node,(new_node))
                                 #adding symmetric edge
                                 graph.add_edge((new_node),single_node)
-                                #### do not remove!!!
-                                #value_list_single_node_initial.remove(value)
+
+                                formulas_in[new_node] = []
                                 graph.node[single_node] = value_list_single_node_initial
                                 graph.node[new_node] = [part]
 
@@ -386,30 +411,37 @@ def symmetric_gamma_node(graph, node):
                                     for j in range(0,len(set)):
                                         if set[j][0] == 'not' and set[j][1][0] == 'diamond':
                                             formula = ('not',set[j][1][1])
-                                            #print "here print: ", formula
-                                            graph.node[new_node].append(formula)
+                                            if formula not in graph.node[new_node]:
+                                                graph.node[new_node].append(formula)
+                                                alpha_node_solve(graph,new_node)
+                                                beta_node_solve(graph,new_node, formulas_in)
                                         elif set[j][0] == 'box':
-                                            graph.node[new_node].append(set[j][1])
+                                            if set[j][1] not in graph.node[new_node]:
+                                                graph.node[new_node].append(set[j][1])
+                                                alpha_node_solve(graph,new_node)
+                                                beta_node_solve(graph,new_node, formulas_in)
 
+            alpha_node_solve(graph, node)
+            beta_node_solve(graph, node, formulas_in)
 
         elif value[0] == 'not' and value[1][0] == 'diamond':
             formula = ('not', value[1][1])
-            #find previous node and add box formula to it
             try:
                 graph.successors(node)
             except:
                 break
             next_node = graph.successors(node)
-            #print "before loop, next node is: ", next_node, " from node ", node
+
             for single_node in next_node:
                 if single_node < node:
                     #take the initial size of list to check whether it expanded
                     initial_size = len(graph.node[single_node])
                     if formula not in graph.node[single_node]:
                         graph.node[single_node].append(formula)
-                    alpha_node_solve(graph,single_node)
-                    beta_node_solve(graph,single_node)
+                    alpha_node_solve(graph, single_node)
+                    beta_node_solve(graph, single_node, formulas_in)
                     final_size = len(graph.node[single_node])
+
                     #take diff to scan for these new entries
                     diff_size = final_size-initial_size
                     if diff_size > 0:
@@ -432,8 +464,8 @@ def symmetric_gamma_node(graph, node):
                                 graph.add_edge(single_node,(new_node))
                                 #adding symmetric edge
                                 graph.add_edge((new_node),single_node)
-                                #### do not remove!!!
-                                #value_list_single_node_initial.remove(value)
+
+                                formulas_in[new_node] = []
                                 graph.node[single_node] = value_list_single_node_initial
                                 graph.node[new_node] = [part]
 
@@ -446,9 +478,13 @@ def symmetric_gamma_node(graph, node):
                                             #print "here print: ", formula
                                             if formula not in graph.node[new_node]:
                                                 graph.node[new_node].append(formula)
+                                                alpha_node_solve(graph,new_node)
+                                                beta_node_solve(graph,new_node, formulas_in)
                                         elif set[j][0] == 'box':
                                             if set[j][0] not in graph.node[new_node]:
                                                 graph.node[new_node].append(set[j][1])
+                                                alpha_node_solve(graph,new_node)
+                                                beta_node_solve(graph,new_node, formulas_in)
 
                             elif isinstance(value,tuple) and value[0] == 'not' and value[1][0] == 'box':
                                 part = ('not', value[1][1])
@@ -457,8 +493,8 @@ def symmetric_gamma_node(graph, node):
                                 graph.add_edge(single_node,(new_node))
                                 #adding symmetric edge
                                 graph.add_edge((new_node),single_node)
-                                #### do not remove!!!
-                                #value_list_single_node_initial.remove(value)
+
+                                formulas_in[new_node] = []
                                 graph.node[single_node] = value_list_single_node_initial
                                 graph.node[new_node] = [part]
 
@@ -471,36 +507,41 @@ def symmetric_gamma_node(graph, node):
                                             #print "here print: ", formula
                                             if formula not in graph.node[new_node]:
                                                 graph.node[new_node].append(formula)
+                                                alpha_node_solve(graph,new_node)
+                                                beta_node_solve(graph,new_node, formulas_in)
                                         elif set[j][0] == 'box':
                                             if set[j][0] not in graph.node[new_node]:
                                                 graph.node[new_node].append(set[j][1])
-
-
-number_graph = 1
+                                                alpha_node_solve(graph,new_node)
+                                                beta_node_solve(graph,new_node, formulas_in)
+            alpha_node_solve(graph, node)
+            beta_node_solve(graph, node, formulas_in)
+num_graph = 0
 for graph in Graphs:
-
+    formulas_in = graph_formulas[num_graph]
+    #print "graph number: ", num_graph
+    #print "for graph with formula: ", formulas_in
     status = 1;
     index = 1;
-    print "graph number is: ", number_graph
-    alpha_node(graph)
-    beta_node(graph)
     alpha_node(graph)
     while status == 1:
         for node in range(index,len(graph.nodes())+1):
-            #print "we are at node: ", node
+            #print "node value: ", graph.node[node]
             start_length = len(graph.nodes())
 
             alpha_node_solve(graph,node)
-            remove_dups_graph(graph)
 
-            beta_node_solve(graph, node)
-            remove_dups_graph(graph)
+            beta_node_solve(graph, node, formulas_in)
 
-            delta_node_solve(graph,node)
-            remove_dups_graph(graph)
+            delta_node_solve(graph, node, formulas_in)
 
-            symmetric_gamma_node(graph, node)
-            remove_dups_graph(graph)
+            symmetric_gamma_node(graph, node, formulas_in)
+
+            alpha_node_solve(graph,node)
+
+            beta_node_solve(graph, node, formulas_in)
+
+            delta_node_solve(graph, node, formulas_in)
 
             end_length = len(graph.nodes())
             if start_length < end_length:
@@ -510,12 +551,10 @@ for graph in Graphs:
                 index = index+1
             else:
                 status = 0;
-
-    #remove_dups_graph(graph)
-    number_graph +=1
-
-
-#finding inconsistencies in the model
+    num_graph += 1
+'''
+    :finding inconsistencies in the model
+'''
 index_inconsistent =[]
 for i in range(0,len(Graphs)):
     graph = Graphs[i]
@@ -552,15 +591,16 @@ else:
         node_colours=['y']
         for node in graph.nodes():
             custom_labels[node] = graph.node[node]
-            node_colours.append('b')
+            node_colours.append('c')
         '''
         for j in range(1,len(graph.nodes())+1):
             custom_labels[j] = graph.node[j]
             node_colours.append('b')
         '''
-        nx.draw(Graphs[i],  node_size=1000, with_labels=True, labels = custom_labels, node_color=node_colours)
+        nx.draw(Graphs[i], nx.circular_layout(Graphs[i]),  node_size=1500, with_labels=True, labels = custom_labels, node_color=node_colours)
         #show with custom labels
         fig_name = "graph" + str(i) + ".png"
+
         plt.savefig(fig_name)
         plt.show()
 

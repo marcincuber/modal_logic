@@ -2,14 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eca2a2a0-265e-413b-9339-186b9524e46e" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/main_run.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test_new.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Logic_Symmetric.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/graph2.png" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/graph0.png" afterPath="$PROJECT_DIR$/graph0.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/graph1.png" afterPath="$PROJECT_DIR$/graph1.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Logic_K.py" afterPath="$PROJECT_DIR$/Logic_K.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Logic_K4_transitive.py" afterPath="$PROJECT_DIR$/Logic_K4_transitive.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Logic_S4_trans_refl.py" afterPath="$PROJECT_DIR$/Logic_S4_trans_refl.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Logic_Symm&amp;Refl.py" afterPath="$PROJECT_DIR$/Logic_Symm&amp;Refl.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Logic_T.py" afterPath="$PROJECT_DIR$/Logic_T.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.txt" afterPath="$PROJECT_DIR$/README.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/graph.py" afterPath="$PROJECT_DIR$/graph.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sols.py" afterPath="$PROJECT_DIR$/sols.py" />
     </list>
     <ignored path="PyCharm.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,15 +30,18 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
-    <favorites_list name="PyCharm" />
+    <favorites_list name="PyCharm">
+      <favorite_root url="file://$PROJECT_DIR$/graph.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+      <favorite_root url="file://$PROJECT_DIR$/Logic_K.py" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+    </favorites_list>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Logic_K.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Logic_K.py">
+      <file leaf-file-name="Logic_KB.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Logic_KB.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4004193">
-              <caret line="23" column="13" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
+            <state vertical-scroll-proportion="7.413395">
+              <caret line="227" column="45" selection-start-line="227" selection-start-column="16" selection-end-line="227" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -71,19 +78,27 @@
         <option value="$PROJECT_DIR$/test_new.py" />
         <option value="$PROJECT_DIR$/input.py" />
         <option value="$PROJECT_DIR$/Logic_K_test_version.py" />
-        <option value="$PROJECT_DIR$/sols.py" />
-        <option value="$PROJECT_DIR$/graph.py" />
         <option value="$PROJECT_DIR$/ToDo.txt" />
-        <option value="$PROJECT_DIR$/README.txt" />
         <option value="$PROJECT_DIR$/verified_tests.txt" />
         <option value="$PROJECT_DIR$/Logic_S4_trans_reflex.py" />
-        <option value="$PROJECT_DIR$/Logic_Symm&amp;Refl.py" />
-        <option value="$PROJECT_DIR$/Logic_Symmetric.py" />
-        <option value="$PROJECT_DIR$/Logic_T.py" />
-        <option value="$PROJECT_DIR$/Logic_K.py" />
-        <option value="$PROJECT_DIR$/Logic_K4_transitive.py" />
         <option value="$PROJECT_DIR$/Logic_S4_trans_refl.py" />
         <option value="$PROJECT_DIR$/Logic_K_test_new.py" />
+        <option value="$PROJECT_DIR$/Logic_S5.py" />
+        <option value="$PROJECT_DIR$/graph.py" />
+        <option value="$PROJECT_DIR$/Logic_K4_transitive.py" />
+        <option value="$PROJECT_DIR$/Logic_Symm&amp;Refl.py" />
+        <option value="$PROJECT_DIR$/Logic_T.py" />
+        <option value="$PROJECT_DIR$/Logic_T_new_test.py" />
+        <option value="$PROJECT_DIR$/test_file" />
+        <option value="$PROJECT_DIR$/Logic_K_testing.py" />
+        <option value="$PROJECT_DIR$/Logic_T_fresh.py" />
+        <option value="$PROJECT_DIR$/Logic_Symmetric.py" />
+        <option value="$PROJECT_DIR$/Logic_K.py" />
+        <option value="$PROJECT_DIR$/Logic_T_new.py" />
+        <option value="$PROJECT_DIR$/Logic_T_KB.py" />
+        <option value="$PROJECT_DIR$/sols.py" />
+        <option value="$PROJECT_DIR$/Logic_KB.py" />
+        <option value="$PROJECT_DIR$/README.txt" />
       </list>
     </option>
   </component>
@@ -121,6 +136,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -141,7 +157,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -172,7 +187,24 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Logic_K_test_new">
+  <component name="RunManager" selected="Python.Logic_KB">
+    <configuration default="false" name="Logic_K_test_new" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="PyCharm" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Logic_K.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
     <configuration default="false" name="Logic_Symmetric" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -190,7 +222,7 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
-    <configuration default="false" name="Logic_K4_transitive" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration default="false" name="Logic_KB" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -202,12 +234,12 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="PyCharm" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Logic_K4_transitive.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Logic_KB.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
-    <configuration default="false" name="Logic_S4_trans_reflex" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration default="false" name="Logic_T_new" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -219,12 +251,12 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="PyCharm" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Logic_S4_trans_reflex.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Logic_T.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
-    <configuration default="false" name="Logic_S4_trans_refl" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration default="false" name="Logic_T_KB" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -236,24 +268,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="PyCharm" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Logic_S4_trans_refl.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="Logic_K_test_new" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="PyCharm" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Logic_K.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Logic_KB.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -399,19 +414,19 @@
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Python.test_new" />
-      <item index="1" class="java.lang.String" itemvalue="Python.Logic_Symmetric" />
-      <item index="2" class="java.lang.String" itemvalue="Python.Logic_K4_transitive" />
-      <item index="3" class="java.lang.String" itemvalue="Python.Logic_S4_trans_reflex" />
-      <item index="4" class="java.lang.String" itemvalue="Python.Logic_S4_trans_refl" />
-      <item index="5" class="java.lang.String" itemvalue="Python.Logic_K_test_new" />
+      <item index="1" class="java.lang.String" itemvalue="Python.Logic_K_test_new" />
+      <item index="2" class="java.lang.String" itemvalue="Python.Logic_Symmetric" />
+      <item index="3" class="java.lang.String" itemvalue="Python.Logic_KB" />
+      <item index="4" class="java.lang.String" itemvalue="Python.Logic_T_new" />
+      <item index="5" class="java.lang.String" itemvalue="Python.Logic_T_KB" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.Logic_K_test_new" />
-        <item index="1" class="java.lang.String" itemvalue="Python.Logic_Symmetric" />
-        <item index="2" class="java.lang.String" itemvalue="Python.Logic_S4_trans_refl" />
-        <item index="3" class="java.lang.String" itemvalue="Python.Logic_K4_transitive" />
-        <item index="4" class="java.lang.String" itemvalue="Python.Logic_S4_trans_reflex" />
+        <item index="0" class="java.lang.String" itemvalue="Python.Logic_KB" />
+        <item index="1" class="java.lang.String" itemvalue="Python.Logic_T_KB" />
+        <item index="2" class="java.lang.String" itemvalue="Python.Logic_T_new" />
+        <item index="3" class="java.lang.String" itemvalue="Python.Logic_K_test_new" />
+        <item index="4" class="java.lang.String" itemvalue="Python.Logic_Symmetric" />
       </list>
     </recent_temporary>
   </component>
@@ -435,10 +450,10 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1625" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38778222" sideWeight="0.503125" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32934928" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934928" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934928" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38778222" sideWeight="0.496875" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38778222" sideWeight="0.496875" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -503,9 +518,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#991#1014#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -517,13 +529,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ToDo.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Logic_Symmetric.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -579,31 +584,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sols.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="5.887574">
-          <caret line="199" column="0" selection-start-line="199" selection-start-column="0" selection-end-line="199" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/syntax.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="2" selection-start-line="2" selection-start-column="2" selection-end-line="2" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ToDo.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.31177828">
           <caret line="9" column="19" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.62355655">
-          <caret line="18" column="11" selection-start-line="18" selection-start-column="11" selection-end-line="18" selection-end-column="11" />
         </state>
       </provider>
     </entry>
@@ -614,57 +598,89 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Logic_Symm&amp;Refl.py">
+    <entry file="file://$PROJECT_DIR$/Logic_S4_trans_refl.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.37644342">
-          <caret line="562" column="50" selection-start-line="562" selection-start-column="50" selection-end-line="562" selection-end-column="50" />
+        <state vertical-scroll-proportion="0.79676676">
+          <caret line="31" column="22" selection-start-line="31" selection-start-column="22" selection-end-line="31" selection-end-column="22" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Logic_T.py">
+    <entry file="file://$PROJECT_DIR$/Logic_S5.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.20323326">
-          <caret line="477" column="50" selection-start-line="477" selection-start-column="50" selection-end-line="477" selection-end-column="50" />
+        <state vertical-scroll-proportion="0.5889146">
+          <caret line="51" column="24" selection-start-line="51" selection-start-column="24" selection-end-line="51" selection-end-column="24" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/graph.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38106236">
-          <caret line="56" column="18" selection-start-line="56" selection-start-column="17" selection-end-line="56" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Logic_Symmetric.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6581986">
-          <caret line="547" column="19" selection-start-line="547" selection-start-column="19" selection-end-line="547" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Logic_S4_trans_refl.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.79676676">
-          <caret line="31" column="22" selection-start-line="31" selection-start-column="22" selection-end-line="31" selection-end-column="22" />
-          <folding>
-            <element signature="e#991#1014#0" expanded="false" />
-          </folding>
+        <state vertical-scroll-proportion="0.33103448">
+          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Logic_K4_transitive.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="16.17783">
-          <caret line="552" column="45" selection-start-line="552" selection-start-column="45" selection-end-line="552" selection-end-column="45" />
+        <state vertical-scroll-proportion="0.8660508">
+          <caret line="108" column="26" selection-start-line="108" selection-start-column="26" selection-end-line="108" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Logic_Symm&amp;Refl.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="108" column="26" selection-start-line="108" selection-start-column="26" selection-end-line="108" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/syntax.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="2" selection-start-line="2" selection-start-column="2" selection-end-line="2" selection-end-column="2" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Logic_K.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4004193">
-          <caret line="23" column="13" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.7274827">
+          <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+          <folding>
+            <element signature="e#45#58#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Logic_T.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.17321016">
+          <caret line="12" column="36" selection-start-line="12" selection-start-column="36" selection-end-line="12" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sols.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.6352202">
+          <caret line="63" column="43" selection-start-line="63" selection-start-column="43" selection-end-line="63" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.1039261">
+          <caret line="10" column="41" selection-start-line="10" selection-start-column="41" selection-end-line="10" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Logic_KB.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="7.413395">
+          <caret line="227" column="45" selection-start-line="227" selection-start-column="16" selection-end-line="227" selection-end-column="45" />
           <folding />
         </state>
       </provider>
