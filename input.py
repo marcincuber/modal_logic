@@ -1,5 +1,4 @@
-# Auther: Marcin Cuber
-# All rights reserved
+__author__ = 'marcincuber'
 '''
     To input correctly formula
     :Legend:
@@ -21,7 +20,7 @@
 '''
     :input string
 '''
-str_psi = "@r ^~((#(p > q) >  (#p > @q)))"
+str_psi = "@r"
 
 
 

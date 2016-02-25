@@ -1,7 +1,7 @@
 __author__ = 'marcincuber'
 # -*- coding: utf-8 -*-
 """
-    :Modal Logic KB- symmetric frames
+    :Modal Logic KB- symmetric and reflexive frames
 """
 import syntax
 import sols
@@ -10,7 +10,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import copy
 from collections import OrderedDict
-
 
 #import symbols
 BML = syntax.Language(*syntax.default_ascii)
@@ -28,11 +27,10 @@ formulas = {} #single dictionary
 formulas[1] = [] #first list for node 1
 graph_formulas.append(formulas)#add it to list of dictionaries
 
-
 '''
     :Input String:
 '''
-str_psi = "@(#@u V #@t)"
+str_psi = "(#(#@r ^ @#t))"
 print "formula input: ", (str_psi)
 
 '''
@@ -63,6 +61,7 @@ def remove_dups_graph(graph):
         value_list = graph.node[node]
         unique_list = remove_duplicates(value_list)
         graph.node[node] = unique_list
+
 '''
     :resolving ALPHAS given a GRAPH
 '''
@@ -276,6 +275,38 @@ def delta_node_solve(graph, node, formulas_in):
                                 graph.node[new_node].append(set[j][1])
                                 alpha_node_solve(graph, new_node)
                                 beta_node_solve(graph, new_node, formulas_in)
+'''
+    :solving gammas at a NODE in graph
+'''
+def reflexive_gamma_node(graph, node, formulas_in):
+    value_list = graph.node[node]
+    size = len(graph.node[node])
+    status = 1;
+    index = 0;
+    while status == 1:
+        for i in range(index,size):
+            value = value_list[i]
+            if value[0] == 'box':
+                formula = value[1]
+                if value not in formulas_in[node]:
+                    #formulas_in[node].append(value)
+                    if formula not in graph.node[node]:
+                        graph.node[node].append(formula)
+
+            elif value[0] == 'not' and value[1][0] == "diamond":
+                formula = ('not', value[1][1])
+                if value not in formulas_in[node]:
+                    #formulas_in[node].append(value)
+                    if formula not in graph.node[node]:
+                        graph.node[node].append(formula)
+        new_size = len(graph.node[node])
+
+        if size == new_size:
+            status = 0;
+        else:
+            diff = new_size - size
+            index = len(graph.node[node])-diff
+            size = new_size
 
 '''
     :solving gammas at a NODE in graph
@@ -287,6 +318,7 @@ def symmetric_gamma_node(graph, node, formulas_in):
     index = 0
     for i in range(index,size):
         value = value_list[i]
+
         if value[0] == 'box':
             formula = value[1]
             if value not in formulas_in[node]:
@@ -295,23 +327,25 @@ def symmetric_gamma_node(graph, node, formulas_in):
                     graph.successors(node)
                 except:
                     break
+
                 next_node = graph.successors(node)
-                #print "before loop, next node is: ", next_node, " from node ", node
                 for single_node in next_node:
                     if single_node < node:
                         #take the initial size of list to check whether it expanded
                         initial_size = len(graph.node[single_node])
+
                         if formula not in graph.node[single_node]:
                             graph.node[single_node].append(formula)
-
                         alpha_node_solve(graph,single_node)
                         beta_node_solve(graph,single_node, formulas_in)
 
+                        #size after appending formula
                         final_size = len(graph.node[single_node])
                         #take diff to scan for these new entries
                         diff_size = final_size-initial_size
                         if diff_size > 0:
                             value_list_single_node_initial= graph.node[single_node]
+                            #print "value_list_single_node: ",value_list_single_node_initial
                             value_list_single_node = value_list_single_node_initial[-diff_size:]
                             for value in value_list_single_node:
                                 #print "last value is", value
@@ -411,7 +445,7 @@ def symmetric_gamma_node(graph, node, formulas_in):
                             value_list_single_node_initial= graph.node[single_node]
                             value_list_single_node = value_list_single_node_initial[-diff_size:]
                             for value in value_list_single_node:
-
+                                print "last value is", value
                                 if isinstance(value,tuple) and value[0] == 'box':
                                     part = value[1]
                                     if part not in graph.node[node]:
@@ -492,18 +526,14 @@ for graph in Graphs:
     alpha_node(graph)
     while status == 1:
         for node in range(index,len(graph.nodes())+1):
-
+            #print "node value: ", graph.node[node]
             start_length = len(graph.nodes())
 
             alpha_node_solve(graph,node)
 
             beta_node_solve(graph, node, formulas_in)
 
-            delta_node_solve(graph, node, formulas_in)
-
-            symmetric_gamma_node(graph, node, formulas_in)
-
-            delta_node_solve(graph, node, formulas_in)
+            reflexive_gamma_node(graph, node, formulas_in)
 
             alpha_node_solve(graph,node)
 
@@ -513,6 +543,14 @@ for graph in Graphs:
 
             symmetric_gamma_node(graph, node, formulas_in)
 
+            alpha_node_solve(graph,node)
+
+            beta_node_solve(graph, node, formulas_in)
+
+            delta_node_solve(graph, node, formulas_in)
+
+            symmetric_gamma_node(graph, node, formulas_in)
+            
             end_length = len(graph.nodes())
             if start_length < end_length:
                 diff = end_length - start_length
@@ -547,7 +585,6 @@ if index_inconsistent is not []:
 '''
     :display and save as pictures all the exiting graphs in the list
 '''
-
 if Graphs == []:
     print "sorry there a no models for the formula below"
     print "your provided formula is: ", (syntax.formula_to_string(psi))

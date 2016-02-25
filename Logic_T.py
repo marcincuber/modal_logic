@@ -1,49 +1,43 @@
-# Author: Marcin Cuber
-# All rights reserved
+__author__ = 'marcincuber'
+# -*- coding: utf-8 -*-
+"""
+    :Modal Logic T- reflexive frames
+"""
 import syntax
 import sols
 import graph
 import networkx as nx
 import matplotlib.pyplot as plt
 import copy
-
 from collections import OrderedDict
 
-'''
-    :Modal Logic T- reflexive frames
-'''
-'''
-Sybmol import
-'''
+
+#import symbols
 BML = syntax.Language(*syntax.default_ascii)
 
 '''
-Arrays to store the number of worlds and sets that correspond to each world
+    :Arrays to store the number of worlds and sets that correspond to each world
 '''
-Graphs = [];
-Worlds = [1];
-Edges = [];
-Sets = [];
-graph_formulas = []
+Graphs = [] #initilise empty list of graphs
+Worlds = [1] #list of worlds with root node
+Edges = [] #initilise list storing edges needed to create the graph
+Sets = [] #initilise list to store formulas which will be available in each world
 
-formulas = {}
-formulas[1] = []
-graph_formulas.append(formulas)
-temp_graph_formulas =[]
+graph_formulas = [] #list of dictionaries-used formulas in node for graph
+formulas = {} #single dictionary
+formulas[1] = [] #first list for node 1
+graph_formulas.append(formulas)#add it to list of dictionaries
 
 '''
-Input String:
+    :Input String:
 '''
-str_psi = "(@(@#s V ##u) > @(~#t ^ @r)) "
+str_psi = "(@(#q V @#u) ^ #(~#t ^ ~(@s V @#p))) "
 print "formula input: ", (str_psi)
 
 '''
-Parsed string into tuple and list
+    :Parsed string into tuple and list
 '''
 psi = syntax.parse_formula(BML, str_psi)
-
-#print "parsed formula to prefix format: " + str(psi)
-
 Sets.append(sols.recursivealpha(psi))
 
 '''
@@ -56,7 +50,6 @@ uniq_Sets = [list(OrderedDict.fromkeys(l)) for l in Sets]
 
 graph.create_graph_K(G,Edges,uniq_Sets)
 Graphs.append(G)
-
 
 '''
     :functions to remove duplicates from the list
@@ -110,6 +103,7 @@ def alpha_node_solve(graph,node):
         elif isinstance(value_list[i], str):
             set.append(value_list[i])
     graph.node[node] = set
+
 '''
     :resolving BETAS given a NODE in graph
 '''
@@ -174,7 +168,6 @@ def beta_node_solve(graph, node, formulas_in):
                     alpha_node(graph)
 
             elif value[0] == 'imply':
-                print value[0], value[1], value[2]
                 part1 = value[1]
                 part2 = value[2]
                 left_part = ('not',part1)
@@ -286,7 +279,6 @@ def delta_node_solve(graph, node, formulas_in):
 def reflexive_gamma_node(graph, node, formulas_in):
 
     value_list = graph.node[node]
-    #print "size is: ", len(value_list), value_list
     size = len(graph.node[node])
     status = 1;
     index = 0;
@@ -314,6 +306,10 @@ def reflexive_gamma_node(graph, node, formulas_in):
             diff = new_size - size
             index = len(graph.node[node])-diff
             size = new_size
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""             Main loop iterating over graphs         """
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 num_graph = 0
 for graph in Graphs:
     formulas_in = graph_formulas[num_graph]
@@ -323,7 +319,6 @@ for graph in Graphs:
     while status == 1:
         for node in range(index,len(graph.nodes())+1):
 
-            #print "node value: ", graph.node[node]
             start_length = len(graph.nodes())
 
             alpha_node_solve(graph,node)
@@ -347,6 +342,7 @@ for graph in Graphs:
             else:
                 status = 0;
     num_graph += 1
+
 '''
     :finding inconsistencies in the model
 '''
@@ -368,7 +364,6 @@ if index_inconsistent is not []:
     for num in reversed(index_inconsistent):
         del Graphs[num];
 
-
 '''
     :display and save as pictures all the exiting graphs in the list
 '''
@@ -387,16 +382,12 @@ else:
         for node in graph.nodes():
             custom_labels[node] = graph.node[node]
             node_colours.append('c')
-        '''
-        for j in range(1,len(graph.nodes())+1):
-            custom_labels[j] = graph.node[j]
-            node_colours.append('b')
-        '''
-        nx.draw(Graphs[i], nx.circular_layout(Graphs[i]),  node_size=1500, with_labels=True, labels = custom_labels, node_color=node_colours)
+
+        nx.draw(Graphs[i], nx.circular_layout(Graphs[i]), node_size=1500, with_labels=True, labels = custom_labels, node_color=node_colours)
         #show with custom labels
         fig_name = "graph" + str(i) + ".png"
 
-        plt.savefig(fig_name)
+        #plt.savefig(fig_name)
         plt.show()
 
     print "Satisfiable models have been displayed."
@@ -406,3 +397,4 @@ else:
         print "You have ",len(Graphs), " valid models."
     print "Your provided formula is: ", (syntax.formula_to_string(psi))
     print "Pictures of the graphs have been saves as: graph0.png, graph1.png etc."
+
