@@ -1,43 +1,53 @@
 # Author: Marcin Cuber
 # All rights reserved
-This is a Propositional Modal Logic solver for following logics:
+These are Propositional Modal Logic solvers. I have used tableaux method to derive solutions. We have following logics covered:
 
-K:  has been completed - Logic_K.py can be used to test formulas
+K:  completed - Logic_K.py
     no properties
 
 T:  completed - Logic_T.py
     reflexive   []p -> p
 
-K4: completed- almost - transitive frames
+K4: completed- Logic_K4.py
+    transitive frames
 
-KB:  Completed - Logic_Symmetric
+KB: completed - Logic_KB.py
     symmetric   p -> []<>p
 
-B: Completed
+B:  completed - Logic_B.py
     symmetric and reflexive
 
-S4: started
+S4: completed - Logic_S4.py
     reflexive and transitive    []p -> [][]p
 
-S5: finished
+S5: completed - Logic_S5.py
     reflexive, transitive and symmetric
     S4 + <>p ->[]<>p
-
-S4.3: not started
-    same as S4 but additionally linear
-
-
 
 How to use:
     1. Download all the .py files
     2. Place them in one folder
     3. Open Logic_?.py with python interpreter where ? corresponds to logic
-    4. Read some simple instructions in input.py
-    5. Input your formula
+    4. Using instructions below write formula
+    5. Input your formula inside specific file str_psi = "formula"
     6. Run, test and get results
-    7. And graphs (valid models)
+    7. Each graph corresponds to a Kripke model in which the formula is satisfiable
 
-I have used tableaux method to derive the solutions.
+Formula input instructions:
+    To input correctly formula
+    :Legend:
+        AND is represented by the symbol:                ^
+        OR is represented by the symbol:                 V
+        IMPLICATION is represented by the symbol:        >
+        BOX (must) is represented by the symbol:         #
+        DIAMOND (possibly) is represented by the symbol: @
 
+    :Example input:
+        str_psi = "~(p > #r) ^  (@p >((@@@s^#t) V (#s ^ @q))) "
 
-No copying or reusing of applications is allowed!!!
+        which can be easier visualised as
+        ~(p -> []r) ^ (<>p -> ((<><><>s ^ []t) V ([]s ^ <>q)))
+    :After writting a formula run Logic_?.py and it will bring the results
+    :Do no change the name of the string (str_psi)
+
+No copying or reusing of applications is allowed!
