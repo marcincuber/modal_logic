@@ -94,15 +94,19 @@ def alpha_node_solve(graph,node):
         if isinstance(value_list[i], tuple):
             alpha = sols.recursivealpha(value_list[i])
             if isinstance(alpha[0], tuple):
-                set.append(alpha[0])
-                if len(alpha) > 1:
-                    set.append(alpha[1])
+                if alpha[0] not in set:
+                    set.append(alpha[0])
+                    if len(alpha) > 1:
+                        if alpha[1] not in set:
+                            set.append(alpha[1])
             else:
                 for prop in alpha:
-                    set.append(prop)
+                    if prop not in set:
+                        set.append(prop)
 
         elif isinstance(value_list[i], str):
-            set.append(value_list[i])
+            if value_list[i] not in set:
+                set.append(value_list[i])
     graph.node[node] = set
 '''
     :resolving BETAS given a NODE in graph

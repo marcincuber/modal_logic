@@ -30,7 +30,7 @@ graph_formulas.append(formulas)#add it to list of dictionaries
 '''
     :Input String:
 '''
-str_psi = "(###p ^ @s) > #(@@u ^ #@t)"
+str_psi = "(#(@#u ^ #@s) ^ @~(#p > @q))"
 print "formula input: ", (str_psi)
 
 '''
@@ -93,15 +93,19 @@ def alpha_node_solve(graph,node):
         if isinstance(value_list[i], tuple):
             alpha = sols.recursivealpha(value_list[i])
             if isinstance(alpha[0], tuple):
-                set.append(alpha[0])
-                if len(alpha) > 1:
-                    set.append(alpha[1])
+                if alpha[0] not in set:
+                    set.append(alpha[0])
+                    if len(alpha) > 1:
+                        if alpha[1] not in set:
+                            set.append(alpha[1])
             else:
                 for prop in alpha:
-                    set.append(prop)
+                    if prop not in set:
+                        set.append(prop)
 
         elif isinstance(value_list[i], str):
-            set.append(value_list[i])
+            if value_list[i] not in set:
+                set.append(value_list[i])
     graph.node[node] = set
 '''
     :resolving BETAS given a NODE in graph
@@ -226,7 +230,7 @@ def delta_node_solve(graph, node, formulas_in):
                 formulas_in[new_node] = []
                 alpha_node_solve(graph, node)
                 beta_node_solve(graph, node, formulas_in)
-                transitive_gamma_node(graph, new_node)
+                transitive_gamma_node(graph, new_node, formulas_in)
                 alpha_node_solve(graph, node)
                 beta_node_solve(graph, node, formulas_in)
 
@@ -259,7 +263,7 @@ def delta_node_solve(graph, node, formulas_in):
                 formulas_in[new_node] = []
                 alpha_node_solve(graph, node)
                 beta_node_solve(graph, node, formulas_in)
-                transitive_gamma_node(graph, new_node)
+                transitive_gamma_node(graph, new_node, formulas_in)
                 alpha_node_solve(graph, node)
                 beta_node_solve(graph, node, formulas_in)
 
@@ -279,7 +283,7 @@ def delta_node_solve(graph, node, formulas_in):
                                 alpha_node_solve(graph, new_node)
                                 beta_node_solve(graph, new_node, formulas_in)
 
-def transitive_gamma_node(graph, node):
+def transitive_gamma_node(graph, node, formulas_in):
     parent = graph.predecessors(node)
     status = True
     if len(parent) == 0: #check if predecessor exists
@@ -298,11 +302,19 @@ def transitive_gamma_node(graph, node):
                     for i in range(0,len(set)):
                         if set[i][0] == 'not' and set[i][1][0] == 'diamond':
                             formula = ('not',set[i][1][1])
-                            if formula not in graph.node[node]:
-                                graph.node[node].append(formula)
+                            if set[i] not in formulas_in[node]:
+                                formulas_in[node].append(set[i])
+                                if formula not in graph.node[node]:
+                                    graph.node[node].append(formula)
+                                alpha_node_solve(graph, node)
+                                beta_node_solve(graph,node,formulas_in)
                         elif set[i][0] == 'box':
-                            if set[i][1] not in graph.node[node]:
-                                graph.node[node].append(set[i][1])
+                            if set[i] not in formulas_in[node]:
+                                formulas_in[node].append(set[i])
+                                if set[i][1] not in graph.node[node]:
+                                    graph.node[node].append(set[i][1])
+                                alpha_node_solve(graph, node)
+                                beta_node_solve(graph,node,formulas_in)
                 previous = graph.predecessors(previous[0])
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -387,7 +399,10 @@ for graph in Graphs:
                         #deal with the node that already exists
                         if status_inside2 == True:
                             #remove the new_node which already exists
-                            graph.remove_node(i)
+                            try:
+                                graph.remove_node(i)
+                            except:
+                                continue
                             #add an edge from the node to existing node
                             graph.add_edge(current_node,exist)
                             #graph.add_edge(i,exist)

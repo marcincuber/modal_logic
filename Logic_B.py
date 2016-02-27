@@ -30,7 +30,7 @@ graph_formulas.append(formulas)#add it to list of dictionaries
 '''
     :Input String:
 '''
-str_psi = "(#(#@r ^ @#t))"
+str_psi = "~(#(~@r > @#t) ^ ~#~(@p V #s))"
 print "formula input: ", (str_psi)
 
 '''
@@ -93,15 +93,19 @@ def alpha_node_solve(graph,node):
         if isinstance(value_list[i], tuple):
             alpha = sols.recursivealpha(value_list[i])
             if isinstance(alpha[0], tuple):
-                set.append(alpha[0])
-                if len(alpha) > 1:
-                    set.append(alpha[1])
+                if alpha[0] not in set:
+                    set.append(alpha[0])
+                    if len(alpha) > 1:
+                        if alpha[1] not in set:
+                            set.append(alpha[1])
             else:
                 for prop in alpha:
-                    set.append(prop)
+                    if prop not in set:
+                        set.append(prop)
 
         elif isinstance(value_list[i], str):
-            set.append(value_list[i])
+            if value_list[i] not in set:
+                set.append(value_list[i])
     graph.node[node] = set
 '''
     :resolving BETAS given a NODE in graph
@@ -289,14 +293,14 @@ def reflexive_gamma_node(graph, node, formulas_in):
             if value[0] == 'box':
                 formula = value[1]
                 if value not in formulas_in[node]:
-                    #formulas_in[node].append(value)
+                    formulas_in[node].append(value)
                     if formula not in graph.node[node]:
                         graph.node[node].append(formula)
 
             elif value[0] == 'not' and value[1][0] == "diamond":
                 formula = ('not', value[1][1])
                 if value not in formulas_in[node]:
-                    #formulas_in[node].append(value)
+                    formulas_in[node].append(value)
                     if formula not in graph.node[node]:
                         graph.node[node].append(formula)
         new_size = len(graph.node[node])
@@ -539,6 +543,8 @@ for graph in Graphs:
 
             beta_node_solve(graph, node, formulas_in)
 
+            reflexive_gamma_node(graph, node, formulas_in)
+
             delta_node_solve(graph, node, formulas_in)
 
             symmetric_gamma_node(graph, node, formulas_in)
@@ -604,6 +610,9 @@ else:
         #show with custom labels
         fig_name = "graph" + str(i) + ".png"
 
+        #scaling the graph to fit the figure
+        l,r = plt.xlim()
+        plt.xlim(l-1,r+1)
         plt.savefig(fig_name)
         plt.show()
 

@@ -32,7 +32,7 @@ graph_formulas.append(formulas)#add it to list of dictionaries
 '''
     :Input String:
 '''
-str_psi = "@(#@u V #@t)"
+str_psi = "(~#~@(#@u ^ @@t) ^ (~#~@p ^ @#@s)) "
 print "formula input: ", (str_psi)
 
 '''
@@ -94,15 +94,19 @@ def alpha_node_solve(graph,node):
         if isinstance(value_list[i], tuple):
             alpha = sols.recursivealpha(value_list[i])
             if isinstance(alpha[0], tuple):
-                set.append(alpha[0])
-                if len(alpha) > 1:
-                    set.append(alpha[1])
+                if alpha[0] not in set:
+                    set.append(alpha[0])
+                    if len(alpha) > 1:
+                        if alpha[1] not in set:
+                            set.append(alpha[1])
             else:
                 for prop in alpha:
-                    set.append(prop)
+                    if prop not in set:
+                        set.append(prop)
 
         elif isinstance(value_list[i], str):
-            set.append(value_list[i])
+            if value_list[i] not in set:
+                set.append(value_list[i])
     graph.node[node] = set
 '''
     :resolving BETAS given a NODE in graph
@@ -563,7 +567,7 @@ else:
             custom_labels[node] = graph.node[node]
             node_colours.append('c')
 
-        nx.draw(Graphs[i], nx.circular_layout(Graphs[i]),  node_size=1500, with_labels=True, labels = custom_labels, node_color=node_colours)
+        nx.draw(Graphs[i], nx.spring_layout(Graphs[i]),  node_size=1500, with_labels=True, labels = custom_labels, node_color=node_colours)
         #show with custom labels
         fig_name = "graph" + str(i) + ".png"
 

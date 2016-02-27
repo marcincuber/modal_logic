@@ -30,7 +30,7 @@ graph_formulas.append(formulas)#add it to list of dictionaries
 '''
     :Input String:
 '''
-str_psi = "(@p ^ (#@p > @s)) ^ #@t"
+str_psi = "(~#(~@(~p ^ @#t) V ~s) ^ (#@#p > @q)) "
 print "formula input: ", (str_psi)
 
 '''
@@ -72,14 +72,18 @@ def alpha_node(graph):
             if isinstance(value_list[i], tuple):
                 alpha = sols.recursivealpha(value_list[i])
                 if isinstance(alpha[0], tuple):
-                    set.append(alpha[0])
-                    if len(alpha) > 1:
-                        set.append(alpha[1])
+                    if alpha[0] not in set:
+                        set.append(alpha[0])
+                        if len(alpha) > 1:
+                            if alpha[1] not in set:
+                                set.append(alpha[1])
                 else:
                     for prop in alpha:
-                        set.append(prop)
+                        if prop not in set:
+                            set.append(prop)
             elif isinstance(value_list[i], str):
-                set.append(value_list[i])
+                if value_list[i] not in set:
+                    set.append(value_list[i])
         graph.node[node] = remove_duplicates(set)
 '''
     :resolving ALPHAS given a NODE in graph
@@ -92,15 +96,19 @@ def alpha_node_solve(graph,node):
         if isinstance(value_list[i], tuple):
             alpha = sols.recursivealpha(value_list[i])
             if isinstance(alpha[0], tuple):
-                set.append(alpha[0])
-                if len(alpha) > 1:
-                    set.append(alpha[1])
+                if alpha[0] not in set:
+                    set.append(alpha[0])
+                    if len(alpha) > 1:
+                        if alpha[1] not in set:
+                            set.append(alpha[1])
             else:
                 for prop in alpha:
-                    set.append(prop)
+                    if prop not in set:
+                        set.append(prop)
 
         elif isinstance(value_list[i], str):
-            set.append(value_list[i])
+            if value_list[i] not in set:
+                set.append(value_list[i])
     graph.node[node] = set
 '''
     :resolving BETAS given a NODE in graph
@@ -159,7 +167,10 @@ def beta_node_solve(graph, node, formulas_in):
                 Graphs.append(comp2)
 
                 formulas_in[node].append(value)
+                formulas_in[node].append(part1)
+
                 copy_formulas_in = copy.deepcopy(formulas_in)
+                copy_formulas_in[node].append(part2)
                 graph_formulas.append(copy_formulas_in)
 
                 for graph in Graphs:
@@ -226,7 +237,7 @@ def delta_node_solve(graph, node, formulas_in):
                 formulas_in[new_node] = []
                 alpha_node_solve(graph, node)
                 beta_node_solve(graph, node, formulas_in)
-                transitive_gamma_node(graph, new_node)
+                transitive_gamma_node(graph, new_node, formulas_in)
                 alpha_node_solve(graph, node)
                 beta_node_solve(graph, node, formulas_in)
 
@@ -240,11 +251,13 @@ def delta_node_solve(graph, node, formulas_in):
                                 graph.node[new_node].append(formula)
                                 alpha_node_solve(graph, new_node)
                                 beta_node_solve(graph, new_node, formulas_in)
+                                reflexive_gamma_node(graph,node,formulas_in)
                         elif set[j][0] == 'box':
                             if set[j][1] not in graph.node[new_node]:
                                 graph.node[new_node].append(set[j][1])
                                 alpha_node_solve(graph, new_node)
                                 beta_node_solve(graph, new_node, formulas_in)
+                                reflexive_gamma_node(graph,node,formulas_in)
 
         elif part1 == 'not' and delta_list[i][1][0] == 'box':
             sub = delta_list[i]
@@ -259,7 +272,7 @@ def delta_node_solve(graph, node, formulas_in):
                 formulas_in[new_node] = []
                 alpha_node_solve(graph, node)
                 beta_node_solve(graph, node, formulas_in)
-                transitive_gamma_node(graph, new_node)
+                transitive_gamma_node(graph, new_node, formulas_in)
                 alpha_node_solve(graph, node)
                 beta_node_solve(graph, node, formulas_in)
 
@@ -273,11 +286,13 @@ def delta_node_solve(graph, node, formulas_in):
                                 graph.node[new_node].append(formula)
                                 alpha_node_solve(graph, new_node)
                                 beta_node_solve(graph, new_node, formulas_in)
+                                reflexive_gamma_node(graph,node,formulas_in)
                         elif set[j][0] == 'box':
                             if set[j][1] not in graph.node[new_node]:
                                 graph.node[new_node].append(set[j][1])
                                 alpha_node_solve(graph, new_node)
                                 beta_node_solve(graph, new_node, formulas_in)
+                                reflexive_gamma_node(graph,node,formulas_in)
         alpha_node_solve(graph, node)
         beta_node_solve(graph, node, formulas_in)
 '''
@@ -316,7 +331,7 @@ def reflexive_gamma_node(graph, node, formulas_in):
             index = len(graph.node[node])-diff
             size = new_size
 
-def transitive_gamma_node(graph, node):
+def transitive_gamma_node(graph, node, formulas_in):
 
     parent = graph.predecessors(node)
     status = True
@@ -336,11 +351,19 @@ def transitive_gamma_node(graph, node):
                     for i in range(0,len(set)):
                         if set[i][0] == 'not' and set[i][1][0] == 'diamond':
                             formula = ('not',set[i][1][1])
-                            if formula not in graph.node[node]:
-                                graph.node[node].append(formula)
+                            if set[i] not in formulas_in[node]:
+                                formulas_in[node].append(set[i])
+                                if formula not in graph.node[node]:
+                                    graph.node[node].append(formula)
+                            alpha_node_solve(graph, node)
+                            beta_node_solve(graph,node,formulas_in)
                         elif set[i][0] == 'box':
-                            if set[i][1] not in graph.node[node]:
-                                graph.node[node].append(set[i][1])
+                            if set[i] not in formulas_in[node]:
+                                formulas_in[node].append(set[i])
+                                if set[i][1] not in graph.node[node]:
+                                    graph.node[node].append(set[i][1])
+                            alpha_node_solve(graph, node)
+                            beta_node_solve(graph,node,formulas_in)
                 previous = graph.predecessors(previous[0])
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -425,7 +448,10 @@ for graph in Graphs:
                         #deal with the node that already exists
                         if status_inside2 == True:
                             #remove the new_node which already exists
-                            graph.remove_node(i)
+                            try:
+                                graph.remove_node(i)
+                            except:
+                                continue
                             #add an edge from the node to existing node
                             graph.add_edge(current_node,exist)
                             #graph.add_edge(i,exist)
@@ -462,7 +488,6 @@ for graph in Graphs:
 
                                     # increment temp_value in case there are more nodes in the list
                                     temp_value += 1
-
             end_length = len(graph.nodes())
             if start_length < end_length:
                 diff = end_length - start_length
@@ -474,6 +499,7 @@ for graph in Graphs:
 
     #increment number of graph to get correct list with used formulas
     num_graph += 1
+    #print "used formulas in each node: ",formulas_in
 
 '''
     :finding inconsistencies in the model
@@ -514,10 +540,14 @@ else:
             custom_labels[node] = graph.node[node]
             node_colours.append('c')
 
+        #nx.draw(Graphs[i], nx.random_layout(Graphs[i]),  node_size=1500, with_labels=True, labels = custom_labels, node_color=node_colours)
         nx.draw(Graphs[i], nx.circular_layout(Graphs[i]),  node_size=1500, with_labels=True, labels = custom_labels, node_color=node_colours)
         #show with custom labels
         fig_name = "graph" + str(i) + ".png"
 
+         #scaling the graph to fit the figure
+        l,r = plt.xlim()
+        plt.xlim(l-0.5,r+0.5)
         plt.savefig(fig_name)
         plt.show()
 
