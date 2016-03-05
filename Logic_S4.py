@@ -10,7 +10,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import copy
 from collections import OrderedDict
-
+import time
 #import symbols
 BML = syntax.Language(*syntax.default_ascii)
 
@@ -369,192 +369,197 @@ def transitive_gamma_node(graph, node, formulas_in):
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """             Main loop iterating over graphs         """
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-num_graph = 0
-for graph in Graphs:
-    #dictionary of nodes: ticked formulas
-    formulas_in = graph_formulas[num_graph]
+def main():
+    num_graph = 0
+    for graph in Graphs:
+        #dictionary of nodes: ticked formulas
+        formulas_in = graph_formulas[num_graph]
 
-    #initialise loop parameters
-    status = 1;
-    index = 1;
-    #initial solve for alpha
-    alpha_node(graph)
+        #initialise loop parameters
+        status = 1;
+        index = 1;
+        #initial solve for alpha
+        alpha_node(graph)
 
-    #iterate over all nodes and all formulas inside them
-    while status == 1:
-        length = len(graph.nodes())+1
-        for node in range(index,length):
-            #initial number of nodes
-            start_length = len(graph.nodes())
+        #iterate over all nodes and all formulas inside them
+        while status == 1:
+            length = len(graph.nodes())+1
+            for node in range(index,length):
+                #initial number of nodes
+                start_length = len(graph.nodes())
 
-            #set internal status to False
-            status_inside = False
+                #set internal status to False
+                status_inside = False
 
-            #verify whether node exists
-            try:
-                value_node = graph.node[node]
-            except:
-                #move on if it does not exists
-                status_inside = True
-                pass
+                #verify whether node exists
+                try:
+                    value_node = graph.node[node]
+                except:
+                    #move on if it does not exists
+                    status_inside = True
+                    pass
 
-            #when internal status is true add edge between them
-            if status_inside == True:
-                pass
+                #when internal status is true add edge between them
+                if status_inside == True:
+                    pass
 
-            else:
-                alpha_node_solve(graph,node)
-                beta_node_solve(graph, node, formulas_in)
-                reflexive_gamma_node(graph, node, formulas_in)
-                alpha_node_solve(graph,node)
-                beta_node_solve(graph, node, formulas_in)
-                delta_node_solve(graph, node, formulas_in)
+                else:
+                    alpha_node_solve(graph,node)
+                    beta_node_solve(graph, node, formulas_in)
+                    reflexive_gamma_node(graph, node, formulas_in)
+                    alpha_node_solve(graph,node)
+                    beta_node_solve(graph, node, formulas_in)
+                    delta_node_solve(graph, node, formulas_in)
 
-                #new variable to store current node
-                current_node = node
-                #number of node at this stage
-                new_num_nodes = len(graph.nodes())
+                    #new variable to store current node
+                    current_node = node
+                    #number of node at this stage
+                    new_num_nodes = len(graph.nodes())
 
-                #deal with new nodes and compare them with existing ones
-                if new_num_nodes-current_node > 0:
-                    for i in range(new_num_nodes,current_node,-1):
-                        #if the last new node is the same as
-                        try:
-                            if graph.node[current_node] == graph.node[new_num_nodes] and ((current_node,new_num_nodes) in graph.edges()):
-                                graph.remove_node(new_num_nodes)
-                                new_num_nodes = len(graph.nodes())
-                                pass
-                            for all_nodes in range(1,new_num_nodes-1):
-                                if (graph.node[new_num_nodes]==graph.node[all_nodes]) and ((all_nodes,new_num_nodes) not in graph.edges()):
-                                    graph.add_edge(current_node,all_nodes)
+                    #deal with new nodes and compare them with existing ones
+                    if new_num_nodes-current_node > 0:
+                        for i in range(new_num_nodes,current_node,-1):
+                            #if the last new node is the same as
+                            try:
+                                if graph.node[current_node] == graph.node[new_num_nodes] and ((current_node,new_num_nodes) in graph.edges()):
                                     graph.remove_node(new_num_nodes)
                                     new_num_nodes = len(graph.nodes())
-                                    break
-                        except:
-                            pass
-
-                        try:
-                            temp_node = graph.node[i]
-                        except:
-                            pass
-
-                        status_inside2 = False
-                        for exist in range(1,current_node):
-                            if temp_node == graph.node[exist] and temp_node != exist:
-                                #if the same node exists set status to true and exit the loop
-                                status_inside2 = True
-                                break
-
-                        #deal with the node that already exists
-                        if status_inside2 == True:
-                            #remove the new_node which already exists
-                            try:
-                                graph.remove_node(i)
-                            except:
-                                continue
-                            #add an edge from the node to existing node
-                            graph.add_edge(current_node,exist)
-                            #graph.add_edge(i,exist)
-
-                            #get currrent list of nodes in the graph
-                            list_of_nodes = graph.nodes()
-
-                            #check nodes that have id > than deleted node and change ids, ids cannot have gaps in numbering
-                            new_counter = i
-                            temp_value = 0
-                            for sig_node in list_of_nodes:
-                                #when id of the node is greater than the deleted one deal with it
-                                if (sig_node > new_counter+temp_value) and ((new_counter+temp_value) not in list_of_nodes):
-                                    #add missing node
-                                    try:
-                                        graph.add_node(new_counter+temp_value)
-                                        #assign set of formulas to a new node
-                                        graph.node[new_counter+temp_value] = graph.node[sig_node]
-                                    except:
-                                        graph.remove_node(new_counter+temp_value)
+                                    pass
+                                for all_nodes in range(1,new_num_nodes-1):
+                                    if (graph.node[new_num_nodes]==graph.node[all_nodes]) and ((all_nodes,new_num_nodes) not in graph.edges()):
+                                        graph.add_edge(current_node,all_nodes)
+                                        graph.remove_node(new_num_nodes)
+                                        new_num_nodes = len(graph.nodes())
                                         break
+                            except:
+                                pass
 
-                                    #scan predecessor of the higher node and deal with edges
-                                    predecessor = graph.predecessors(sig_node)
+                            try:
+                                temp_node = graph.node[i]
+                            except:
+                                pass
 
-                                    for pred in predecessor:
-                                        graph.add_edge(pred,new_counter+temp_value)
+                            status_inside2 = False
+                            for exist in range(1,current_node):
+                                if temp_node == graph.node[exist] and temp_node != exist:
+                                    #if the same node exists set status to true and exit the loop
+                                    status_inside2 = True
+                                    break
 
-                                    #after we dealt with edges we can remove the higher order node
-                                    graph.remove_node(sig_node)
+                            #deal with the node that already exists
+                            if status_inside2 == True:
+                                #remove the new_node which already exists
+                                try:
+                                    graph.remove_node(i)
+                                except:
+                                    continue
+                                #add an edge from the node to existing node
+                                graph.add_edge(current_node,exist)
+                                #graph.add_edge(i,exist)
 
-                                    #get the current list of nodes
-                                    list_of_nodes = graph.nodes()
+                                #get currrent list of nodes in the graph
+                                list_of_nodes = graph.nodes()
 
-                                    # increment temp_value in case there are more nodes in the list
-                                    temp_value += 1
-            end_length = len(graph.nodes())
-            if start_length < end_length:
-                diff = end_length - start_length
-                index = index+1
-            elif index < len(graph.nodes()):
-                index = index+1
-            else:
-                status = 0;
+                                #check nodes that have id > than deleted node and change ids, ids cannot have gaps in numbering
+                                new_counter = i
+                                temp_value = 0
+                                for sig_node in list_of_nodes:
+                                    #when id of the node is greater than the deleted one deal with it
+                                    if (sig_node > new_counter+temp_value) and ((new_counter+temp_value) not in list_of_nodes):
+                                        #add missing node
+                                        try:
+                                            graph.add_node(new_counter+temp_value)
+                                            #assign set of formulas to a new node
+                                            graph.node[new_counter+temp_value] = graph.node[sig_node]
+                                        except:
+                                            graph.remove_node(new_counter+temp_value)
+                                            break
 
-    #increment number of graph to get correct list with used formulas
-    num_graph += 1
-    #print "used formulas in each node: ",formulas_in
+                                        #scan predecessor of the higher node and deal with edges
+                                        predecessor = graph.predecessors(sig_node)
 
-'''
-    :finding inconsistencies in the model
-'''
-index_inconsistent =[]
-for i in range(0,len(Graphs)):
-    graph = Graphs[i]
-    for node in graph.nodes():
-        consistent_list = graph.node[node]
-        #print "we are here:", consistent_list
-        status = sols.inconsistent(consistent_list)
-        if status == True:
-            #print "graph: ",i, " is inconsistent"
-            index_inconsistent.append(i)
-        else:
-            status == False
-index_inconsistent = list(set(index_inconsistent))
-# removing inconsistent graphs- models
-if index_inconsistent is not []:
-    for num in reversed(index_inconsistent):
-        del Graphs[num];
+                                        for pred in predecessor:
+                                            graph.add_edge(pred,new_counter+temp_value)
 
-'''
-    :display and save as pictures all the exiting graphs in the list
-'''
-if Graphs == []:
-    print "sorry there a no models for the formula below"
-    print "your provided formula is: ", (syntax.formula_to_string(psi))
-    print "This means that the negation of it : ", "~(",(syntax.formula_to_string(psi)), ") is valid."
+                                        #after we dealt with edges we can remove the higher order node
+                                        graph.remove_node(sig_node)
 
-else:
+                                        #get the current list of nodes
+                                        list_of_nodes = graph.nodes()
+
+                                        # increment temp_value in case there are more nodes in the list
+                                        temp_value += 1
+                end_length = len(graph.nodes())
+                if start_length < end_length:
+                    diff = end_length - start_length
+                    index = index+1
+                elif index < len(graph.nodes()):
+                    index = index+1
+                else:
+                    status = 0;
+
+        #increment number of graph to get correct list with used formulas
+        num_graph += 1
+        #print "used formulas in each node: ",formulas_in
+
+    '''
+        :finding inconsistencies in the model
+    '''
+    index_inconsistent =[]
     for i in range(0,len(Graphs)):
         graph = Graphs[i]
-
-        custom_labels={}
-        node_colours=['y']
         for node in graph.nodes():
-            custom_labels[node] = graph.node[node]
-            node_colours.append('c')
+            consistent_list = graph.node[node]
+            #print "we are here:", consistent_list
+            status = sols.inconsistent(consistent_list)
+            if status == True:
+                #print "graph: ",i, " is inconsistent"
+                index_inconsistent.append(i)
+            else:
+                status == False
+    index_inconsistent = list(set(index_inconsistent))
+    # removing inconsistent graphs- models
+    if index_inconsistent is not []:
+        for num in reversed(index_inconsistent):
+            del Graphs[num];
 
-        #nx.draw(Graphs[i], nx.random_layout(Graphs[i]),  node_size=1500, with_labels=True, labels = custom_labels, node_color=node_colours)
-        nx.draw(Graphs[i], nx.circular_layout(Graphs[i]),  node_size=1500, with_labels=True, labels = custom_labels, node_color=node_colours)
-        #show with custom labels
-        fig_name = "graph" + str(i) + ".png"
+    '''
+        :display and save as pictures all the exiting graphs in the list
+    '''
+    if Graphs == []:
+        print "sorry there a no models for the formula below"
+        print "your provided formula is: ", (syntax.formula_to_string(psi))
+        print "This means that the negation of it : ", "~(",(syntax.formula_to_string(psi)), ") is valid."
 
-         #scaling the graph to fit the figure
-        l,r = plt.xlim()
-        plt.xlim(l-0.5,r+0.5)
-        plt.savefig(fig_name)
-        plt.show()
-
-    print "Satisfiable models have been displayed."
-    if len(Graphs) == 1:
-        print "You have ",len(Graphs), " valid model."
     else:
-        print "You have ",len(Graphs), " valid models."
-    print "Your provided formula is: ", (syntax.formula_to_string(psi))
-    print "Pictures of the graphs have been saves as: graph0.png, graph1.png etc."
+        for i in range(0,len(Graphs)):
+            graph = Graphs[i]
+
+            custom_labels={}
+            node_colours=['y']
+            for node in graph.nodes():
+                custom_labels[node] = graph.node[node]
+                node_colours.append('c')
+
+            #nx.draw(Graphs[i], nx.random_layout(Graphs[i]),  node_size=1500, with_labels=True, labels = custom_labels, node_color=node_colours)
+            nx.draw(Graphs[i], nx.circular_layout(Graphs[i]),  node_size=1500, with_labels=True, labels = custom_labels, node_color=node_colours)
+            #show with custom labels
+            fig_name = "graph" + str(i) + ".png"
+
+             #scaling the graph to fit the figure
+            l,r = plt.xlim()
+            plt.xlim(l-0.5,r+0.5)
+            plt.savefig(fig_name)
+            plt.show()
+
+        print "Satisfiable models have been displayed."
+        if len(Graphs) == 1:
+            print "You have ",len(Graphs), " valid model."
+        else:
+            print "You have ",len(Graphs), " valid models."
+        print "Your provided formula is: ", (syntax.formula_to_string(psi))
+        print "Pictures of the graphs have been saves as: graph0.png, graph1.png etc."
+
+t0 = time.clock()
+main()
+print ((time.clock() - t0), " seconds process time")

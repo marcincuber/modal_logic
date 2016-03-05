@@ -10,7 +10,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import copy
 from collections import OrderedDict
-
+import time
 
 #import symbols
 BML = syntax.Language(*syntax.default_ascii)
@@ -314,91 +314,95 @@ def reflexive_gamma_node(graph, node, formulas_in):
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """             Main loop iterating over graphs         """
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-num_graph = 0
-for graph in Graphs:
-    formulas_in = graph_formulas[num_graph]
-    status = 1;
-    index = 1;
-    alpha_node(graph)
-    while status == 1:
-        for node in range(index,len(graph.nodes())+1):
+def main():
+    num_graph = 0
+    for graph in Graphs:
+        formulas_in = graph_formulas[num_graph]
+        status = 1;
+        index = 1;
+        alpha_node(graph)
+        while status == 1:
+            for node in range(index,len(graph.nodes())+1):
 
-            start_length = len(graph.nodes())
+                start_length = len(graph.nodes())
 
-            alpha_node_solve(graph,node)
+                alpha_node_solve(graph,node)
 
-            beta_node_solve(graph, node, formulas_in)
+                beta_node_solve(graph, node, formulas_in)
 
-            reflexive_gamma_node(graph, node, formulas_in)
+                reflexive_gamma_node(graph, node, formulas_in)
 
-            alpha_node_solve(graph,node)
+                alpha_node_solve(graph,node)
 
-            beta_node_solve(graph, node, formulas_in)
+                beta_node_solve(graph, node, formulas_in)
 
-            delta_node_solve(graph, node,formulas_in)
+                delta_node_solve(graph, node,formulas_in)
 
-            end_length = len(graph.nodes())
-            if start_length < end_length:
-                diff = end_length - start_length
-                index = index+1
-            elif index < len(graph.nodes()):
-                index = index+1
-            else:
-                status = 0;
-    num_graph += 1
+                end_length = len(graph.nodes())
+                if start_length < end_length:
+                    diff = end_length - start_length
+                    index = index+1
+                elif index < len(graph.nodes()):
+                    index = index+1
+                else:
+                    status = 0;
+        num_graph += 1
 
-'''
-    :finding inconsistencies in the model
-'''
-index_inconsistent =[]
-for i in range(0,len(Graphs)):
-    graph = Graphs[i]
-    for node in graph.nodes():
-        consistent_list = graph.node[node]
-        #print "we are here:", consistent_list
-        status = sols.inconsistent(consistent_list)
-        if status == True:
-            #print "graph: ",i, " is inconsistent"
-            index_inconsistent.append(i)
-        else:
-            status == False
-index_inconsistent = list(set(index_inconsistent))
-# removing inconsistent graphs- models
-if index_inconsistent is not []:
-    for num in reversed(index_inconsistent):
-        del Graphs[num];
-
-'''
-    :display and save as pictures all the exiting graphs in the list
-'''
-
-if Graphs == []:
-    print "sorry there a no models for the formula below"
-    print "your provided formula is: ", (syntax.formula_to_string(psi))
-    print "This means that the negation of it : ", "~(",(syntax.formula_to_string(psi)), ") is valid."
-
-else:
+    '''
+        :finding inconsistencies in the model
+    '''
+    index_inconsistent =[]
     for i in range(0,len(Graphs)):
         graph = Graphs[i]
-
-        custom_labels={}
-        node_colours=['y']
         for node in graph.nodes():
-            custom_labels[node] = graph.node[node]
-            node_colours.append('c')
+            consistent_list = graph.node[node]
+            #print "we are here:", consistent_list
+            status = sols.inconsistent(consistent_list)
+            if status == True:
+                #print "graph: ",i, " is inconsistent"
+                index_inconsistent.append(i)
+            else:
+                status == False
+    index_inconsistent = list(set(index_inconsistent))
+    # removing inconsistent graphs- models
+    if index_inconsistent is not []:
+        for num in reversed(index_inconsistent):
+            del Graphs[num];
 
-        nx.draw(Graphs[i], nx.circular_layout(Graphs[i]), node_size=1500, with_labels=True, labels = custom_labels, node_color=node_colours)
-        #show with custom labels
-        fig_name = "graph" + str(i) + ".png"
+    '''
+        :display and save as pictures all the exiting graphs in the list
+    '''
 
-        plt.savefig(fig_name)
-        plt.show()
+    if Graphs == []:
+        print "sorry there a no models for the formula below"
+        print "your provided formula is: ", (syntax.formula_to_string(psi))
+        print "This means that the negation of it : ", "~(",(syntax.formula_to_string(psi)), ") is valid."
 
-    print "Satisfiable models have been displayed."
-    if len(Graphs) == 1:
-        print "You have ",len(Graphs), " valid model."
     else:
-        print "You have ",len(Graphs), " valid models."
-    print "Your provided formula is: ", (syntax.formula_to_string(psi))
-    print "Pictures of the graphs have been saves as: graph0.png, graph1.png etc."
+        for i in range(0,len(Graphs)):
+            graph = Graphs[i]
 
+            custom_labels={}
+            node_colours=['y']
+            for node in graph.nodes():
+                custom_labels[node] = graph.node[node]
+                node_colours.append('c')
+
+            nx.draw(Graphs[i], nx.circular_layout(Graphs[i]), node_size=1500, with_labels=True, labels = custom_labels, node_color=node_colours)
+            #show with custom labels
+            fig_name = "graph" + str(i) + ".png"
+
+            plt.savefig(fig_name)
+            plt.show()
+
+        print "Satisfiable models have been displayed."
+        if len(Graphs) == 1:
+            print "You have ",len(Graphs), " valid model."
+        else:
+            print "You have ",len(Graphs), " valid models."
+        print "Your provided formula is: ", (syntax.formula_to_string(psi))
+        print "Pictures of the graphs have been saves as: graph0.png, graph1.png etc."
+
+t0 = time.clock()
+main()
+print ((time.clock() - t0), " seconds process time")
