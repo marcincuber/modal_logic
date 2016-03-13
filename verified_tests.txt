@@ -7,21 +7,21 @@ Tested cases:
 
 
     Logic_Symmetric.py:
-        1. (@p ^###q) ^ (@s ^ ~###@t)
-        2. (@p ^#q) V (@s ^ ~#@t)
-        3. (@p > #q) ^ ~(@s > ~#@t)
-        4. ~((@p > #q) ^ ~(@s > ~#@t))
-        5. ~(~(@p > #q) ^ (@s > ~#@t))
-        6. ~p ^ @q
-        7. ~#p ^ @q
-        8. @s ^ (~#p ^ #@q)
-        9. @s > (~#p ^ #@q)
-        10. @#s > (@~#p ^ ##@q)
-        11. (@#s > @t) > (@~#p ^ ##@q)
-        12. (@#s > @t) ^ (@~#p ^ ##@q)
-        13. (@#s > @t) V (@~#p ^ ##@q)
+        1. (Dp ^BBBq) ^ (Ds ^ ~BBBDt)
+        2. (Dp ^Bq) V (Ds ^ ~BDt)
+        3. (Dp > Bq) ^ ~(Ds > ~BDt)
+        4. ~((Dp > Bq) ^ ~(Ds > ~BDt))
+        5. ~(~(Dp > Bq) ^ (Ds > ~BDt))
+        6. ~p ^ Dq
+        7. ~Bp ^ Dq
+        8. Ds ^ (~Bp ^ BDq)
+        9. Ds > (~Bp ^ BDq)
+        10. DBs > (D~Bp ^ BBDq)
+        11. (DBs > Dt) > (D~Bp ^ BBDq)
+        12. (DBs > Dt) ^ (D~Bp ^ BBDq)
+        13. (DBs > Dt) V (D~Bp ^ BBDq)
 
     Logic_K4_transitive.py:
-        1. ((@@q ^ #t) V (#@s ^ ~#t))
-        2. @s ^ (~#p ^ #@q)
-        3. (@#s ^ #@q)
+        1. ((DDq ^ Bt) V (BDs ^ ~Bt))
+        2. Ds ^ (~Bp ^ BDq)
+        3. (DBs ^ BDq)

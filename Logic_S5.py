@@ -13,7 +13,7 @@ from collections import OrderedDict
 import time
 
 #import symbols
-BML = syntax.Language(*syntax.default_ascii)
+SET = syntax.Language(*syntax.ascii_setup)
 
 '''
     :Arrays to store the number of worlds and sets that correspond to each world
@@ -31,13 +31,13 @@ graph_formulas.append(formulas)#add it to list of dictionaries
 '''
     :Input String:
 '''
-str_psi = "((~@@#~p V (~#@p ^ @@q)) > (@~#@s ^ @~#t)) "
+str_psi = "((~DDB~p V (~BDp ^ DDq)) > (D~BDs ^ D~Bt)) "
 print "formula input: ", (str_psi)
 
 '''
     :Parsed string into tuple and list
 '''
-psi = syntax.parse_formula(BML, str_psi)
+psi = syntax.parse_formula(SET, str_psi)
 Sets.append(sols.recursivealpha(psi))
 
 '''
@@ -72,13 +72,13 @@ def alpha_node(graph):
         for i in range(0,len(value_list)):
             if isinstance(value_list[i], tuple):
                 alpha = sols.recursivealpha(value_list[i])
-                if isinstance(alpha[0], tuple):
-                    set.append(alpha[0])
-                    if len(alpha) > 1:
-                        set.append(alpha[1])
-                else:
-                    for prop in alpha:
-                        set.append(prop)
+                for j in alpha:
+                    if isinstance(j, tuple):
+                        if j not in set:
+                            set.append(j)
+                    else:
+                        for prop in alpha:
+                            set.append(prop)
             elif isinstance(value_list[i], str):
                 set.append(value_list[i])
         graph.node[node] = remove_duplicates(set)
@@ -92,12 +92,10 @@ def alpha_node_solve(graph,node):
     for i in range(0,len(value_list)):
         if isinstance(value_list[i], tuple):
             alpha = sols.recursivealpha(value_list[i])
-            if isinstance(alpha[0], tuple):
-                if alpha[0] not in set:
-                    set.append(alpha[0])
-                    if len(alpha) > 1:
-                        if alpha[1] not in set:
-                            set.append(alpha[1])
+            for j in alpha:
+                if isinstance(j, tuple):
+                    if j not in set:
+                        set.append(j)
             else:
                 for prop in alpha:
                     if prop not in set:

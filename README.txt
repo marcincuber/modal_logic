@@ -39,15 +39,15 @@ Formula input instructions:
         AND is represented by the symbol:                ^
         OR is represented by the symbol:                 V
         IMPLICATION is represented by the symbol:        >
-        BOX (must) is represented by the symbol:         #
-        DIAMOND (possibly) is represented by the symbol: @
+        BOX (must) is represented by the symbol:         B
+        DIAMOND (possibly) is represented by the symbol: D
 
     :Example input:
-        str_psi = "~(p > #r) ^  (@p >((@@@s^#t) V (#s ^ @q))) "
+        str_psi = "~(p > Br) ^  (Dp >((DDDs^Bt) V (Bs ^ Dq))) "
 
         which can be easier visualised as
         ~(p -> []r) ^ (<>p -> ((<><><>s ^ []t) V ([]s ^ <>q)))
     :After writting a formula run Logic_?.py and it will bring the results
     :Do no change the name of the string (str_psi)
 
-No copying or reusing of applications is allowed!
+No copying of the applications allowed without consent!

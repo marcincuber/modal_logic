@@ -13,7 +13,7 @@ import time
 from collections import OrderedDict
 
 #import symbols
-BML = syntax.Language(*syntax.default_ascii)
+SET = syntax.Language(*syntax.ascii_setup)
 
 '''
     :Arrays to store the number of worlds and sets that correspond to each world
@@ -31,13 +31,16 @@ graph_formulas.append(formulas)#add it to list of dictionaries
 '''
     :Input String:
 '''
-str_psi = "~(#(~@r > @#t) ^ ~#~(@p V #s))"
+#str_psi = "~(#(~@r > @#t) ^ ~#~(@p V #s))"
+str_psi = "B(BDr ^ DBt)"
+#str_psi = "(@(@r > @#t)) ^ (##@p)"
+#str_psi = "@#p ^ #@@#q"
 print "formula input: ", (str_psi)
 
 '''
     :Parsed string into tuple and list
 '''
-psi = syntax.parse_formula(BML, str_psi)
+psi = syntax.parse_formula(SET, str_psi)
 Sets.append(sols.recursivealpha(psi))
 
 '''
@@ -73,13 +76,13 @@ def alpha_node(graph):
         for i in range(0,len(value_list)):
             if isinstance(value_list[i], tuple):
                 alpha = sols.recursivealpha(value_list[i])
-                if isinstance(alpha[0], tuple):
-                    set.append(alpha[0])
-                    if len(alpha) > 1:
-                        set.append(alpha[1])
-                else:
-                    for prop in alpha:
-                        set.append(prop)
+                for j in alpha:
+                    if isinstance(j, tuple):
+                        if j not in set:
+                            set.append(j)
+                    else:
+                        for prop in alpha:
+                            set.append(prop)
             elif isinstance(value_list[i], str):
                 set.append(value_list[i])
         graph.node[node] = remove_duplicates(set)
@@ -93,12 +96,10 @@ def alpha_node_solve(graph,node):
     for i in range(0,len(value_list)):
         if isinstance(value_list[i], tuple):
             alpha = sols.recursivealpha(value_list[i])
-            if isinstance(alpha[0], tuple):
-                if alpha[0] not in set:
-                    set.append(alpha[0])
-                    if len(alpha) > 1:
-                        if alpha[1] not in set:
-                            set.append(alpha[1])
+            for j in alpha:
+                if isinstance(j, tuple):
+                    if j not in set:
+                        set.append(j)
             else:
                 for prop in alpha:
                     if prop not in set:
@@ -304,6 +305,7 @@ def reflexive_gamma_node(graph, node, formulas_in):
                     formulas_in[node].append(value)
                     if formula not in graph.node[node]:
                         graph.node[node].append(formula)
+
         new_size = len(graph.node[node])
 
         if size == new_size:
@@ -326,12 +328,25 @@ def symmetric_gamma_node(graph, node, formulas_in):
 
         if value[0] == 'box':
             formula = value[1]
+            try:
+                parent = graph.predecessors(node)[0]
+                if formula not in graph.node[parent]:
+                    graph.node[parent].append(formula)
+
+                    alpha_node_solve(graph,parent)
+                    beta_node_solve(graph,parent,formulas_in)
+                    reflexive_gamma_node(graph,parent,formulas_in)
+                    delta_node_solve(graph,parent,formulas_in)
+                    symmetric_gamma_node(graph,parent,formulas_in)
+            except:
+                continue
+
             if value not in formulas_in[node]:
                 formulas_in[node].append(value)
                 try:
                     graph.successors(node)
                 except:
-                    break
+                    pass
 
                 next_node = graph.successors(node)
                 for single_node in next_node:
@@ -343,6 +358,7 @@ def symmetric_gamma_node(graph, node, formulas_in):
                             graph.node[single_node].append(formula)
                         alpha_node_solve(graph,single_node)
                         beta_node_solve(graph,single_node, formulas_in)
+                        reflexive_gamma_node(graph,node,formulas_in)
 
                         #size after appending formula
                         final_size = len(graph.node[single_node])
@@ -426,12 +442,24 @@ def symmetric_gamma_node(graph, node, formulas_in):
 
         elif value[0] == 'not' and value[1][0] == 'diamond':
             formula = ('not', value[1][1])
+            try:
+                parent = graph.predecessors(node)[0]
+                if formula not in graph.node[parent]:
+                    graph.node[parent].append(formula)
+
+                    alpha_node_solve(graph,parent)
+                    beta_node_solve(graph,parent,formulas_in)
+                    reflexive_gamma_node(graph,parent,formulas_in)
+                    delta_node_solve(graph,parent,formulas_in)
+                    symmetric_gamma_node(graph,parent,formulas_in)
+            except:
+                continue
             if value not in formulas_in[node]:
                 formulas_in[node].append(value)
                 try:
                     graph.successors(node)
                 except:
-                    break
+                    pass
                 next_node = graph.successors(node)
 
                 for single_node in next_node:
@@ -442,6 +470,7 @@ def symmetric_gamma_node(graph, node, formulas_in):
                             graph.node[single_node].append(formula)
                         alpha_node_solve(graph, single_node)
                         beta_node_solve(graph, single_node, formulas_in)
+                        reflexive_gamma_node(graph,node,formulas_in)
                         final_size = len(graph.node[single_node])
 
                         #take diff to scan for these new entries
@@ -557,14 +586,16 @@ def main():
 
                 delta_node_solve(graph, node, formulas_in)
 
+                reflexive_gamma_node(graph,node,formulas_in)
+
                 symmetric_gamma_node(graph, node, formulas_in)
 
                 end_length = len(graph.nodes())
                 if start_length < end_length:
                     diff = end_length - start_length
-                    index = index+1
+                    index = index + 1
                 elif index < len(graph.nodes()):
-                    index = index+1
+                    index = index + 1
                 else:
                     status = 0;
         num_graph += 1

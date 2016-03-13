@@ -1,10 +1,10 @@
 __author__ = 'marcincuber'
 # -*- coding: utf-8 -*-
-default_ascii =    [{'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'},
+ascii_setup =    [{'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'},
                     # false, not, or, and, imply
-                    ['F', '~', 'V', '^', '>'],
+                    ['F','~', 'V', '^', '>'],
                     # diamond, box
-                    ('@', '#'),
+                    ('D', 'B'),
                     {('(',')'), ('[',']'), ('{','}')}
                    ]
 
@@ -23,16 +23,16 @@ class Language:
                        modality = None,
                        brackets = None):
         if prop == None:
-            prop = default_ascii[0]
+            prop = ascii_setup[0]
         self.prop = prop
         if constants == None:
-            constants = default_ascii[1]
+            constants = ascii_setup[1]
         self.constants = constants
         if modality == None:
-            modality = default_ascii[2]
+            modality = ascii_setup[2]
         self.modality = modality
         if brackets == None:
-            brackets = default_ascii[3]
+            brackets = ascii_setup[3]
         self.brackets = brackets
 
 
