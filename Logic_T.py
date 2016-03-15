@@ -5,7 +5,7 @@ __author__ = 'marcincuber'
 """
 import syntax
 import sols
-import graph
+import graph as gr
 import networkx as nx
 import matplotlib.pyplot as plt
 import copy
@@ -31,11 +31,10 @@ graph_formulas.append(formulas)#add it to list of dictionaries
 '''
     :Input String:
 '''
-#str_psi = "@(@~(~@~#t V @~u) ^ ~(@s > @#p))"
+str_psi = "D(D~(~D~Bt V D~u) ^ ~(Ds > DBp))"
 #str_psi = "@(@~#s V ##u) > @(~#t ^ @r)"
 #str_psi = "~@#@(#@p > @#q) ^ ~#@#(#@~p ^ (#@s ^ ##t))"
-str_psi = "~(BBD(BBp ^ B~q) > DD(BDp > B~q))"
-
+#str_psi = "~(BBD(BBp ^ B~q) > DD(BDp > B~q))"
 
 print "formula input: ", (str_psi)
 
@@ -53,7 +52,7 @@ Sets.append(sols.recursivealpha(psi))
 G = nx.MultiDiGraph()
 uniq_Sets = [list(OrderedDict.fromkeys(l)) for l in Sets]
 
-graph.create_graph_K(G,Edges,uniq_Sets)
+gr.create_graph_K(G,Edges,uniq_Sets)
 Graphs.append(G)
 
 '''
@@ -378,36 +377,7 @@ def main():
     '''
         :display and save as pictures all the exiting graphs in the list
     '''
-
-    if Graphs == []:
-        print "sorry there a no models for the formula below"
-        print "your provided formula is: ", (syntax.formula_to_string(psi))
-        print "This means that the negation of it : ", "~(",(syntax.formula_to_string(psi)), ") is valid."
-
-    else:
-        for i in range(0,len(Graphs)):
-            graph = Graphs[i]
-
-            custom_labels={}
-            node_colours=['y']
-            for node in graph.nodes():
-                custom_labels[node] = graph.node[node]
-                node_colours.append('c')
-
-            nx.draw(Graphs[i], nx.circular_layout(Graphs[i]), node_size=1500, with_labels=True, labels = custom_labels, node_color=node_colours)
-            #show with custom labels
-            fig_name = "graph" + str(i) + ".png"
-
-            plt.savefig(fig_name)
-            plt.show()
-
-        print "Satisfiable models have been displayed."
-        if len(Graphs) == 1:
-            print "You have ",len(Graphs), " valid model."
-        else:
-            print "You have ",len(Graphs), " valid models."
-        print "Your provided formula is: ", (syntax.formula_to_string(psi))
-        print "Pictures of the graphs have been saves as: graph0.png, graph1.png etc."
+    gr.final_graphs(Graphs,psi)
 
 t0 = time.clock()
 main()

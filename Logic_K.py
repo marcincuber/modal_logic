@@ -5,9 +5,8 @@ __author__ = 'marcincuber'
 """
 import syntax
 import sols
-import graph
+import graph as gr
 import networkx as nx
-import matplotlib.pyplot as plt
 import copy
 import time
 from collections import OrderedDict
@@ -32,9 +31,9 @@ graph_formulas.append(formulas)#add it to list of dictionaries
 '''
     :Input String:
 '''
-#str_psi = "~#~@(@#s ^ @(~#t ^ @r)) V @~(@#p > ##u) "
+str_psi = "~B~D(DBs ^ D(~Bt ^ Dr)) V D~(DBp > BBu) "
 #str_psi= "~((@~p V #(~@@p > #q)) V (#q V @@~q))"
-str_psi = "~((B(p) ^ B(p > q)) > B(q))"
+#str_psi = "~((B(p) ^ B(p > q)) > B(q))"
 print "formula input: ", (str_psi)
 
 '''
@@ -51,7 +50,7 @@ Sets.append(sols.recursivealpha(psi))
 G = nx.MultiDiGraph()
 uniq_Sets = [list(OrderedDict.fromkeys(l)) for l in Sets]
 
-graph.create_graph_K(G,Edges,uniq_Sets)
+gr.create_graph_K(G,Edges,uniq_Sets)
 Graphs.append(G)
 
 
@@ -329,34 +328,8 @@ def main():
     '''
         :display and save as pictures all the exiting graphs in the list
     '''
-    if Graphs == []:
-        print "There are no models for the input formula: ", (syntax.formula_to_string(psi))
-        print "So the the negation of it : ", "~(",(syntax.formula_to_string(psi)), ") is valid."
+    gr.final_graphs(Graphs,psi)
 
-    else:
-        for i in range(0,len(Graphs)):
-            graph = Graphs[i]
-
-            custom_labels={}
-            node_colours=['y']
-            for node in graph.nodes():
-                custom_labels[node] = graph.node[node]
-                node_colours.append('c')
-
-            nx.draw(Graphs[i], nx.circular_layout(Graphs[i]),  node_size=1500, with_labels=True, labels = custom_labels, node_color=node_colours)
-            #show with custom labels
-            fig_name = "graph" + str(i) + ".png"
-
-            plt.savefig(fig_name)
-            plt.show()
-
-        print "Satisfiable models have been displayed."
-        if len(Graphs) == 1:
-            print "You have ",len(Graphs), " valid model."
-        else:
-            print "You have ",len(Graphs), " valid models."
-        print "Your provided formula is: ", (syntax.formula_to_string(psi))
-        print "Pictures of the graphs have been saves as: graph0.png, graph1.png etc."
 
 t0 = time.clock()
 main()
