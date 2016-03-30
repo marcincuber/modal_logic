@@ -1,5 +1,6 @@
 __author__ = 'marcincuber'
 # -*- coding: utf-8 -*-
+
 """
     :Modal Logic K- no restrictions on the frame
 """
@@ -18,8 +19,6 @@ SET = syntax.Language(*syntax.ascii_setup)
     :Arrays to store the number of worlds and sets that correspond to each world
 '''
 Graphs = [] #initilise empty list of graphs
-Worlds = [1] #list of worlds with root node
-Edges = [] #initilise list storing edges needed to create the graph
 Sets = [] #initilise list to store formulas which will be available in each world
 
 graph_formulas = [] #list of dictionaries-used formulas in node for graph
@@ -27,13 +26,14 @@ formulas = {} #single dictionary
 formulas[1] = [] #first list for node 1
 graph_formulas.append(formulas)#add it to list of dictionaries
 
-
 '''
     :Input String:
 '''
-str_psi = "~B~D(DBs ^ D(~Bt ^ Dr)) V D~(DBp > BBu) "
+#str_psi = "~B~D(DBs ^ D(~Bt ^ Dr)) V D~(DBp > BBu) "
+#str_psi = "(~B(p ^ Dq) ^ (s ^ (q ^ Dt))) "
 #str_psi= "~((@~p V #(~@@p > #q)) V (#q V @@~q))"
 #str_psi = "~((B(p) ^ B(p > q)) > B(q))"
+str_psi = "(Bp ^ Dq)"
 print "formula input: ", (str_psi)
 
 '''
@@ -50,7 +50,7 @@ Sets.append(sols.recursivealpha(psi))
 G = nx.MultiDiGraph()
 uniq_Sets = [list(OrderedDict.fromkeys(l)) for l in Sets]
 
-gr.create_graph_K(G,Edges,uniq_Sets)
+gr.create_graph_K(G,uniq_Sets)
 Graphs.append(G)
 
 

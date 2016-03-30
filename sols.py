@@ -81,31 +81,169 @@ def inconsistent(psi):
                 if (contra in main_list) and (main in main_list):
                     status = True
                     break
-
-            elif main[0] == 'not' and main[1][0] == 'or' and isinstance(main[1][1][0], str):
-                part = main[1][1][0]
-                contra = ('not',part)
-                if (contra in main_list) and (part in main_list):
+            elif main[0] == 'not' and main[1][0] == 'not' and isinstance(main[1][1],str):
+                if (main[1] in main_list):
                     status = True
                     break
 
-            elif main[0] == 'not' and main[1][0] == 'or' and isinstance(main[1][1][1], str):
-                part = main[1][1][1]
-                contra = ('not',part)
-                if (contra in main_list) and (part in main_list):
-                    status = True
-                    break
-            elif main[0] == 'imply' and isinstance(main[1][0], str):
-                prop = main[1][0]
-                if (prop in main_list):
-                    status = True
-                    break
-
-            elif main[0] == 'imply' and isinstance(main[1][1], str):
-                prop = main[1][1]
-                contra = ('not', prop)
+            elif main[0] == 'not' and main[1][0] == 'or' and isinstance(main[1][1], tuple) and \
+                main[1][1][0] == 'not' and isinstance(main[1][1][1],str):
+                contra = ('not',main[1][1][1])
                 if (contra in main_list):
                     status = True
                     break
+                elif main[0] == 'not' and main[1][0] == 'or' and isinstance(main[1][2], tuple) and \
+                main[1][2][0] == 'not' and isinstance(main[1][2][1],str):
+                    contra = ('not',main[1][2][1])
+                    if (contra in main_list):
+                        status = True
+                        break
+                    elif main[0] == 'not' and main[1][0] == 'or' and isinstance(main[1][2],str):
+                        if (main[1][2] in main_list):
+                            status = True
+                            break
+
+            elif main[0] == 'not' and main[1][0] == 'or' and isinstance(main[1][2], tuple) and \
+                main[1][2][0] == 'not' and isinstance(main[1][2][1],str):
+                    contra = ('not',main[1][2][1])
+                    if (contra in main_list):
+                        status = True
+                        break
+                    elif main[0] == 'not' and main[1][0] == 'or' and isinstance(main[1][1], tuple) and \
+                        main[1][1][0] == 'not' and isinstance(main[1][1][1],str):
+                        contra = ('not',main[1][1][1])
+                        if (contra in main_list):
+                            status = True
+                            break
+                        elif main[0] == 'not' and main[1][0] == 'or' and isinstance(main[1][1],str):
+                            if (main[1][1] in main_list):
+                                status = True
+                                break
+
+            elif main[0] == 'not' and main[1][0] == 'imply' and isinstance(main[1][1], tuple) and \
+                main[1][1][0] == 'not' and isinstance(main[1][1][1],str):
+                print "we are here:"
+                if (main[1][1][1] in main_list):
+                    status = True
+                    break
+                elif main[0] == 'not' and main[1][0] == 'imply' and isinstance(main[1][2], tuple) and \
+                main[1][2][0] == 'not' and isinstance(main[1][2][1],str):
+                    if (main[1][2][1] in main_list):
+                        status = True
+                        break
+                    elif main[0] == 'not' and main[1][0] == 'imply' and isinstance(main[1][2],str):
+                        if (main[1][2] in main_list):
+                            status = True
+                            break
+
+            elif main[0] == 'not' and main[1][0] == 'imply' and isinstance(main[1][2], tuple) and \
+                main[1][2][0] == 'not' and isinstance(main[1][2][1],str):
+                    contra = ('not',main[1][2][1])
+                    if (contra in main_list):
+                        status = True
+                        break
+                    elif main[0] == 'not' and main[1][0] == 'imply' and isinstance(main[1][1], tuple) and \
+                        main[1][1][0] == 'not' and isinstance(main[1][1][1],str):
+                        if (main[1][1][1] in main_list):
+                            status = True
+                            break
+                        elif main[0] == 'not' and main[1][0] == 'imply' and isinstance(main[1][1],str):
+                            contra = ('not', main[1][1])
+                            if (contra in main_list):
+                                status = True
+                                break
+
+            elif main[0] == 'not' and main[1][0] == 'or' and isinstance(main[1][1], str):
+                if (main[1][1] in main_list):
+                    status = True
+                    break
+                elif main[0] == 'not' and main[1][0] == 'or' and isinstance(main[1][2], str):
+                    if (main[1][2] in main_list):
+                        status = True
+                        break
+
+            elif main[0] == 'not' and main[1][0] == 'or' and isinstance(main[1][2], str):
+                if (main[1][2] in main_list):
+                    status = True
+                    break
+                elif main[0] == 'not' and main[1][0] == 'or' and isinstance(main[1][1], str):
+                    if (main[1][1] in main_list):
+                        status = True
+                        break
+
+            elif main[0] == 'not' and main[1][0] == 'imply' and isinstance(main[1][1], str):
+                contra = ('not',main[1][1])
+                if (contra in main_list):
+                    status = True
+                    break
+                elif main[0] == 'not' and main[1][0] == 'imply' and isinstance(main[1][2], str):
+                    if (main[1][2] in main_list):
+                        status = True
+                        break
+
+            elif main[0] == 'not' and main[1][0] == 'imply' and isinstance(main[1][2], str):
+                if (main[1][2] in main_list):
+                    status = True
+                    break
+                elif main[0] == 'not' and main[1][0] == 'imply' and isinstance(main[1][1], str):
+                    contra = ('not',main[1][1])
+                    if (contra in main_list):
+                        status = True
+                        break
+
+            elif main[0] == 'and' and isinstance(main[1], tuple) and main[1][0] == 'not' and \
+                isinstance(main[1][1], str):
+                if (main[1][1] in main_list):
+                    status = True
+                    break
+                elif main[0] == 'and' and isinstance(main[2], tuple) and main[2][0] == 'not' and \
+                isinstance(main[2][1], str):
+                    if (main[2][1] in main_list):
+                        status = True
+                        break
+                    elif main[0] == 'and' and isinstance(main[2], str):
+                        contra = ('not',main[2])
+                        if (contra in main_list):
+                            status = True
+                            break
+
+            elif main[0] == 'and' and isinstance(main[2], tuple) and main[2][0] == 'not' and \
+                isinstance(main[2][1], str):
+                    if (main[2][1] in main_list):
+                        status = True
+                        break
+                    elif main[0] == 'and' and isinstance(main[1], tuple) and main[1][0] == 'not' and \
+                    isinstance(main[1][1], str):
+                        if (main[1][1] in main_list):
+                            status = True
+                            break
+                        elif main[0] == 'and' and isinstance(main[1], str):
+                            contra = ('not',main[1])
+                            if (contra in main_list):
+                                status = True
+                                break
+
+
+            elif main[0] == 'and' and isinstance(main[1], str):
+                contra = ('not',main[1])
+                if (contra in main_list):
+                    status = True
+                    break
+                elif main[0] == 'and' and isinstance(main[2], str):
+                    contra = ('not',main[2])
+                    if (contra in main_list):
+                        status = True
+                        break
+
+            elif main[0] == 'and' and isinstance(main[2], str):
+                contra = ('not',main[2])
+                if (contra in main_list):
+                    status = True
+                    break
+                elif main[0] == 'and' and isinstance(main[1], str):
+                    contra = ('not',main[1])
+                    if (contra in main_list):
+                        status = True
+                        break
     return status
 

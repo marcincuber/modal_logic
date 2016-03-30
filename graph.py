@@ -5,10 +5,7 @@ import syntax
 '''
     :Logic K, T, KB, B, K4, S4, S5- graph initialisation
 '''
-def create_graph_K(G,nodes,Sets):
-    #add edges based on the list of nodes provided
-    G.add_edges_from(nodes)
-
+def create_graph_K(G,Sets):
     #dictionary with labels = value assigned to each world
     custom_labels={}
     #dictionary with sizes for each node
@@ -23,7 +20,7 @@ def create_graph_K(G,nodes,Sets):
         node_colours.append('b')
 
     #draw the graph on circular layout with colours, labels, sizes included.
-    nx.draw(G, nx.circular_layout(G), node_list = nodes,node_color=node_colours, labels=custom_labels, node_size=1000, with_labels = True)
+    nx.draw(G, nx.circular_layout(G),node_color=node_colours, labels=custom_labels, node_size=1000, with_labels = True)
 
     #plot the graph and display the figure
     plt.show()

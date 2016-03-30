@@ -20,8 +20,6 @@ SET = syntax.Language(*syntax.ascii_setup)
     :Arrays to store the number of worlds and sets that correspond to each world
 '''
 Graphs = [] #initilise empty list of graphs
-Worlds = [1] #list of worlds with root node
-Edges = [] #initilise list storing edges needed to create the graph
 Sets = [] #initilise list to store formulas which will be available in each world
 
 graph_formulas = [] #list of dictionaries-used formulas in node for graph
