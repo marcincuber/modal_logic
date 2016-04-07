@@ -27,10 +27,7 @@ graph_formulas.append(formulas)#add it to list of dictionaries
 '''
     :Input String:
 '''
-#str_psi = "(#(@#u ^ #@s) ^ @~(#p > @q))"
-#str_psi = "~(##p > @p) V (#(#p > p) ^ ##~p)"
-#str_psi = "~(((#~p ^ @~q) V (#@q ^ ##~q)) > #(~#p V ~@q))"
-str_psi = "((DBDs ^ (BDu ^ DDq)) V DD(BDt > DBp))"
+str_psi = "Ds ^ (BDu ^ DDq) "
 print "formula input: ", (str_psi)
 
 '''
@@ -40,16 +37,13 @@ psi = syntax.parse_formula(SET, str_psi)
 Sets.append(sols.recursivealpha(psi))
 
 '''
-    :creating graph
-    :deleting non unique elements
-    :passing data to graph function
+    :creating initial graph
 '''
 G = nx.MultiDiGraph()
 uniq_Sets = [list(OrderedDict.fromkeys(l)) for l in Sets]
 
 gr.create_graph_K(G,uniq_Sets)
 Graphs.append(G)
-
 
 '''
     :functions to remove duplicates from the list
@@ -123,11 +117,9 @@ def beta_node_solve(graph, node, formulas_in):
                 graph.node[node].append(part1)
                 comp2.node[node].append(part2)
                 Graphs.append(comp2)
-
                 formulas_in[node].append(value)
                 copy_formulas_in = copy.deepcopy(formulas_in)
                 graph_formulas.append(copy_formulas_in)
-
                 for graph in Graphs:
                     alpha_node(graph)
 
@@ -140,18 +132,15 @@ def beta_node_solve(graph, node, formulas_in):
                 graph.node[node].append(part1)
                 comp2.node[node].append(part2)
                 Graphs.append(comp2)
-
                 formulas_in[node].append(value)
                 copy_formulas_in = copy.deepcopy(formulas_in)
                 graph_formulas.append(copy_formulas_in)
-
                 for graph in Graphs:
                     alpha_node(graph)
 
             elif value[0] == 'not' and value[1][0] == 'and':
                 part1 = value[1][1]
                 part2 = value[1][2]
-
                 left_part = ('not',part1)
                 right_part = ('not',part2)
                 comp2 = graph.copy()
@@ -160,11 +149,9 @@ def beta_node_solve(graph, node, formulas_in):
                 graph.node[node].append(left_part)
                 comp2.node[node].append(right_part)
                 Graphs.append(comp2)
-
                 formulas_in[node].append(value)
                 copy_formulas_in = copy.deepcopy(formulas_in)
                 graph_formulas.append(copy_formulas_in)
-
                 for graph in Graphs:
                     alpha_node(graph)
 
@@ -181,11 +168,9 @@ def beta_node_solve(graph, node, formulas_in):
                 graph.node[node].append(left_part)
                 comp2.node[node].append(part2)
                 Graphs.append(comp2)
-
                 formulas_in[node].append(value)
                 copy_formulas_in = copy.deepcopy(formulas_in)
                 graph_formulas.append(copy_formulas_in)
-
                 for graph in Graphs:
                     alpha_node(graph)
 
@@ -199,11 +184,9 @@ def beta_node_solve(graph, node, formulas_in):
                 graph.node[node].append(left_part)
                 comp2.node[node].append(part2)
                 Graphs.append(comp2)
-
                 formulas_in.append(value)
                 copy_formulas_in = copy.deepcopy(formulas_in)
                 graph_formulas.append(copy_formulas_in)
-
                 for graph in Graphs:
                     alpha_node(graph)
 '''
@@ -221,7 +204,6 @@ def delta_node_solve(graph, node, formulas_in):
                 part2 = delta_list[i][1]
                 new_node= graph.number_of_nodes()+1
                 graph.add_edge(node,(new_node)) #adding new world and relation Rxx'
-
                 graph.node[node] = delta_list
 
                 graph.node[new_node] = [part2]
@@ -404,7 +386,6 @@ def main():
                                     continue
                                 #add an edge from the node to existing node
                                 graph.add_edge(current_node,exist)
-                                #graph.add_edge(i,exist)
 
                                 #get currrent list of nodes in the graph
                                 list_of_nodes = graph.nodes()
@@ -448,7 +429,7 @@ def main():
                 else:
                     status = 0;
 
-        #increment number of graph to get correct list with used formulas
+        #increment number of graphs to get correct list with used formulas
         num_graph += 1
 
     '''
@@ -459,10 +440,8 @@ def main():
         graph = Graphs[i]
         for node in graph.nodes():
             consistent_list = graph.node[node]
-            #print "we are here:", consistent_list
             status = sols.inconsistent(consistent_list)
             if status == True:
-                #print "graph: ",i, " is inconsistent"
                 index_inconsistent.append(i)
             else:
                 status == False

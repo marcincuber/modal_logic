@@ -38,9 +38,7 @@ psi = syntax.parse_formula(SET, str_psi)
 Sets.append(sols.recursivealpha(psi))
 
 '''
-    :creating graph
-    :deleting non unique elements
-    :passing data to graph function
+    :creating initial graph
 '''
 G = nx.MultiDiGraph()
 uniq_Sets = [list(OrderedDict.fromkeys(l)) for l in Sets]
@@ -119,11 +117,9 @@ def beta_node_solve(graph, node, formulas_in):
                 graph.node[node].append(part1)
                 comp2.node[node].append(part2)
                 Graphs.append(comp2)
-
                 formulas_in[node].append(value)
                 copy_formulas_in = copy.deepcopy(formulas_in)
                 graph_formulas.append(copy_formulas_in)
-
                 for graph in Graphs:
                     alpha_node(graph)
 
@@ -136,18 +132,15 @@ def beta_node_solve(graph, node, formulas_in):
                 graph.node[node].append(part1)
                 comp2.node[node].append(part2)
                 Graphs.append(comp2)
-
                 formulas_in[node].append(value)
                 copy_formulas_in = copy.deepcopy(formulas_in)
                 graph_formulas.append(copy_formulas_in)
-
                 for graph in Graphs:
                     alpha_node(graph)
 
             elif value[0] == 'not' and value[1][0] == 'and':
                 part1 = value[1][1]
                 part2 = value[1][2]
-
                 left_part = ('not',part1)
                 right_part = ('not',part2)
                 comp2 = graph.copy()
@@ -156,11 +149,9 @@ def beta_node_solve(graph, node, formulas_in):
                 graph.node[node].append(left_part)
                 comp2.node[node].append(right_part)
                 Graphs.append(comp2)
-
                 formulas_in[node].append(value)
                 copy_formulas_in = copy.deepcopy(formulas_in)
                 graph_formulas.append(copy_formulas_in)
-
                 for graph in Graphs:
                     alpha_node(graph)
 
@@ -177,7 +168,6 @@ def beta_node_solve(graph, node, formulas_in):
                 formulas_in[node].append(value)
                 copy_formulas_in = copy.deepcopy(formulas_in)
                 graph_formulas.append(copy_formulas_in)
-
                 for graph in Graphs:
                     alpha_node(graph)
 
@@ -210,10 +200,8 @@ def delta_node_solve(graph, node, formulas_in):
             sub = delta_list[i]
             part2 = delta_list[i][1]
 
-
             if (sub not in formulas_in[node]) and (part2 not in graph.node[node]):
                 formulas_in[node].append(sub)
-
                 status = False
                 for node_int in graph.nodes():
                     if (sub in formulas_in[node_int]) and (node != node_int):
@@ -254,7 +242,6 @@ def delta_node_solve(graph, node, formulas_in):
             part2 = ('not', delta_list[i][1][1])
             if (sub not in formulas_in[node]) and (part2 not in graph.node[node]):
                 formulas_in[node].append(sub)
-
                 status = False
                 for node_int in graph.nodes():
                     if (sub in formulas_in[node_int]) and (node != node_int):
@@ -386,10 +373,8 @@ def main():
         graph = Graphs[i]
         for node in graph.nodes():
             consistent_list = graph.node[node]
-            #print "we are here:", consistent_list
             status = sols.inconsistent(consistent_list)
             if status == True:
-                #print "graph: ",i, " is inconsistent"
                 index_inconsistent.append(i)
             else:
                 status == False
